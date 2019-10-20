@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Terminal</title>
-    <link>/posts/</link>
-    <description>Recent content in Posts on Terminal</description>
+    <title>Posts on Hugo tranquilpeak theme</title>
+    <link>https://ydwx.github.io/posts/</link>
+    <description>Recent content in Posts on Hugo tranquilpeak theme</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 20 Oct 2019 18:23:20 +0800</lastBuildDate>
     
-	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ydwx.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>My First Post</title>
-      <link>/posts/my-first-post/</link>
+      <link>https://ydwx.github.io/posts/my-first-post/</link>
       <pubDate>Sun, 20 Oct 2019 18:23:20 +0800</pubDate>
       
-      <guid>/posts/my-first-post/</guid>
+      <guid>https://ydwx.github.io/posts/my-first-post/</guid>
       <description></description>
     </item>
     
