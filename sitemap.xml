@@ -3,17 +3,17 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ydwx.github.io/2019/10/my-first-post/</loc>
+    <lastmod>2019-10-20T18:23:20+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ydwx.github.io/</loc>
     <lastmod>2019-10-20T18:23:20+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ydwx.github.io/posts/my-first-post/</loc>
-    <lastmod>2019-10-20T18:23:20+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://ydwx.github.io/posts/</loc>
+    <loc>https://ydwx.github.io/post/</loc>
     <lastmod>2019-10-20T18:23:20+08:00</lastmod>
   </url>
   
