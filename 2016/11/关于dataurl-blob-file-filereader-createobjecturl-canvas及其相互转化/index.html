@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="NonymZhou">
+<meta name="keywords" content="Blob, File, Canvas, FileReader, Javascript, development">
+<meta name="description" content="本文简单介绍了DataURL  Blob  File  FileReader  createObjectURL  canvas，并给出了其他几种类型的转化方式">
+
+
+<meta property="og:description" content="本文简单介绍了DataURL  Blob  File  FileReader  createObjectURL  canvas，并给出了其他几种类型的转化方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于DataURL  Blob  File  FileReader  createObjectURL  canvas及其相互转化">
+<meta name="twitter:title" content="关于DataURL  Blob  File  FileReader  createObjectURL  canvas及其相互转化">
+<meta property="og:url" content="https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+<meta property="twitter:url" content="https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+<meta property="og:site_name" content="Nonym Blog">
+<meta property="og:description" content="本文简单介绍了DataURL  Blob  File  FileReader  createObjectURL  canvas，并给出了其他几种类型的转化方式">
+<meta name="twitter:description" content="本文简单介绍了DataURL  Blob  File  FileReader  createObjectURL  canvas，并给出了其他几种类型的转化方式">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2016-11-30T23:19:47">
+  
+  
+    <meta property="article:modified_time" content="2016-11-30T23:19:47">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+
+
+    <title>关于DataURL  Blob  File  FileReader  createObjectURL  canvas及其相互转化</title>
+
+    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    
+
+    
+
+    <link rel="canonical" href="https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://ydwx.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://ydwx.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">NonymZhou</h4>
+        
+          <h5 class="sidebar-profile-bio">一个前端爱好者的博客</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      关于DataURL  Blob  File  FileReader  createObjectURL  canvas及其相互转化
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2016-11-30T23:19:47&#43;08:00">
+        
+  November 30, 2016
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<h3 id="dataurl">DataURL</h3>
+
+<blockquote>
+<p>传统的img标签是通过引入服务器上的图片资源，浏览器对每个这样的img标签都会向服务器发送一个请求，一个页面中有过多的这种外部资源会导致页面的加载延迟。
+而<code>dataurl</code>是把资源文件的内容转换成base64编码字符串，直接把编码放到src属性里就和一个引用外部资源一样使用了，这样<code>dataurl</code>可以用来优化网站加载速度，特别是html中有大量外部资源引用的时候</p>
+</blockquote>
+
+<pre><code class="language-html">&lt;img src=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABVCAYAAACrfR34AAANXklEQ…zeoA3eFaDbhy7ZoppkoWbcQusOKWBlNlndwHIspuo7WP8A9S1SD+cdaTAAAAAASUVORK5CYII=&quot; /&gt;
+</code></pre>
+
+<blockquote>
+<p>这是上面图片的效果
+<img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMTMwMjMxODM5NDkz?x-oss-process=image/format,png" alt="这里写图片描述" /></p>
+</blockquote>
+
+<h5 id="dataurl的问题">DataURL的问题</h5>
+
+<ul>
+<li>资源文件转换成base64编码文件大小会变为原来的4/3</li>
+<li>Data URL形式的图片不会被浏览器缓存</li>
+</ul>
+
+<h5 id="css中使用dataurl-base64编码可以放在url内使用">CSS中使用DataURL（base64编码可以放在url内使用）</h5>
+
+<pre><code>background-image:url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABVCAYAAACrfR34AAANXklEQ…zeoA3eFaDbhy7ZoppkoWbcQusOKWBlNlndwHIspuo7WP8A9S1SD+cdaTAAAAAASUVORK5CYII=&quot;);
+</code></pre>
+
+<h3 id="blob">Blob</h3>
+
+<blockquote>
+<p>一个<code>Blob</code>对象就是一个包含有只读原始数据的类文件对象，包含的是二进制的数据，File就是基于Blob的接口</p>
+</blockquote>
+
+<h5 id="属性">属性</h5>
+
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>size</td>
+<td>blob对象中包含的数据大小</td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>blob对象中包含的数据的MIME类型（只读）</td>
+</tr>
+</tbody>
+</table>
+
+<h5 id="使用方法">使用方法</h5>
+
+<pre><code class="language-javascript">//创建Blob对象
+var html = &quot;&lt;p&gt;萌新瑟瑟发抖&lt;/p&gt;&quot;;
+var htmlBlob = new Blob([html],'text/xml');
+//第一个参数是数据内容，必须写成数组的形式，第二个参数是数据的类型
+</code></pre>
+
+<h5 id="blob对象方法">Blob对象方法</h5>
+
+<p><strong>slice()</strong>
+用来获取Blob对象中指定范围内的数据，返回新的Blob对象</p>
+
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>start(可选)</td>
+<td>指定要获取的部分的开始位置(默认为0)</td>
+</tr>
+
+<tr>
+<td>end(可选)</td>
+<td>指定要获取的部分的结束位置(默认为最后)</td>
+</tr>
+
+<tr>
+<td>contentType(可选)</td>
+<td>返回的Blob对象的数据类型(默认为空字符串)</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="file">File</h3>
+
+<blockquote>
+<p><code>File</code>是基于<code>Blob</code>的接口，创建方法类似。</p>
+</blockquote>
+
+<h5 id="属性-1">属性</h5>
+
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>name</td>
+<td>File对象的名称(文件名)</td>
+</tr>
+
+<tr>
+<td>lastModified</td>
+<td>File对象最后一次修改时间</td>
+</tr>
+
+<tr>
+<td>size</td>
+<td>File对象中包含的数据大小</td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>File对象中包含的数据的MIME类型（只读）</td>
+</tr>
+</tbody>
+</table>
+
+<h5 id="使用方法-1">使用方法</h5>
+
+<pre><code>//创建File对象
+var html = &quot;&lt;p&gt;萌新瑟瑟发抖&lt;/p&gt;&quot;;
+var htmlFile = new File([html],'text/xml');
+//第一个参数是数据内容，必须写成数组的形式，第二个参数是数据的类型
+</code></pre>
+
+<p><code>File</code>对象可以从<code>&lt;input type='file' /&gt;</code>获取</p>
+
+<p>下面是<strong>html</strong>代码</p>
+
+<pre><code class="language-html">&lt;input type='file' id='file1' /&gt;
+</code></pre>
+
+<p>下面是<strong>js</strong>代码</p>
+
+<pre><code>var file1 = document.getElementById('file1').files[0];
+//这里的file1就是一个File对象
+</code></pre>
+
+<h3 id="filereader">FileReader</h3>
+
+<blockquote>
+<p>FileReader 可以异步的读取计算机上的文件或者是浏览器的缓存，数据来源可以是<code>&lt;input type='file' /&gt;</code>标签，也可以是html中的img标签等，或者是canvas的<code>mozGetAsFile()</code>方法返回的结果</p>
+</blockquote>
+
+<h5 id="创建方法">创建方法</h5>
+
+<pre><code class="language-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa">var fr = new FileReader();
+</code></pre>
+
+<h5 id="readystate取值">readyState取值</h5>
+
+<table>
+<thead>
+<tr>
+<th>状态名</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>EMPTY</td>
+<td>0</td>
+<td>读取文件时发生错误(只读)</td>
+</tr>
+
+<tr>
+<td>LOADING</td>
+<td>1</td>
+<td>指的是读取文件完成或者被中止时的状态(只读)</td>
+</tr>
+
+<tr>
+<td>DONE</td>
+<td>2</td>
+<td>指示已经完成了文件的读取</td>
+</tr>
+</tbody>
+</table>
+
+<h5 id="属性-2">属性</h5>
+
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>error</td>
+<td>读取文件时发生错误(只读)</td>
+</tr>
+
+<tr>
+<td>readyState</td>
+<td>指的是读取文件完成或者被中止时的状态(只读)</td>
+</tr>
+
+<tr>
+<td>result</td>
+<td>FileReader对象读取文件完成后返回的，只有在读取完成后才有效，readAsArrayBuffer()、readAsDataURL()、readAsBinaryString()三个读取文件的方法都会返回result，但是数据类型不同(只读)</td>
+</tr>
+</tbody>
+</table>
+
+<h5 id="方法">方法</h5>
+
+<p><strong>abort()</strong>
+立即结束读取操作，并返回相应数据，这时readyState值为DONE</p>
+
+<p><strong>readAsArrayBuffer()</strong>
+开始读取指定的Blob或File对象中的内容. 当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件处理程序,则调用之.同时,result属性中将包含一个ArrayBuffer对象以表示所读取文件的内容</p>
+
+<p>参数</p>
+
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>blob/file</td>
+<td>一个Blob或File对象</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>var aBuf = fr.readAsArrayBuffer(file1);
+</code></pre>
+
+<p><strong>readAsBinaryString()</strong>
+开始读取指定的Blob或File对象中的内容. 当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件,就调用它.同时,result属性中将包含读取的文件的二进制数据</p>
+
+<p><strong>readAsDataURL()</strong>
+开始读取指定的Blob或File对象中的内容. 当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件,就调用它.同时,result属性中将包含一个DataURL格式的字符串来表示所读取文件的内容</p>
+
+<p><strong>readAsText()</strong>
+开始读取指定的Blob或File对象中的内容. 当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件,就调用它.同时,result属性中将包含一个字符串来表示所读取文件的内容
+(后面这两种方法和readAsArrayBuffer的参数及使用方式都相同)</p>
+
+<h3 id="createobjecturl">createObjectURL</h3>
+
+<blockquote>
+<p>这个方法是window.URL中的一个方法，可以返回一个DataURL字符串，浏览器支持也比较好，相应的有释放的方法revokeObjectURL</p>
+</blockquote>
+
+<h5 id="参数">参数</h5>
+
+<p>|参数名|描述
+|&ndash;|
+|file/blob|File或者Blob对象</p>
+
+<h5 id="使用方法-2">使用方法</h5>
+
+<pre><code>var dataUrl = window.URL.createObjectURL(file1);
+window.URL.createObjectURL(dataurl);
+</code></pre>
+
+<h3 id="canvas之todataurl和toblob函数">canvas之toDataURL和toBlob函数</h3>
+
+<blockquote>
+<p>这里并不是要详细讲解canvas(毕竟博大精深，萌新根本不懂2333)，只是简单介绍canvas 的 toDataURL和toBlob方法</p>
+</blockquote>
+
+<h4 id="todataurl">toDataURL()</h4>
+
+<pre><code class="language-javascript">var img = new Image();
+img.src = dataUrl;
+var canvas = document.createElement('canvas');
+var ctx = canvas.getContext();
+ctx.drawImage(img,sx,sy,swidth,sheight,width,height);
+var dataUrl1 = canvas.toDataURL();
+//这里的dataUrl1就是这个canvas所绘制的这部分图像的数据
+</code></pre>
+
+<h4 id="toblob">toBlob()</h4>
+
+<h5 id="参数-1">参数</h5>
+
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>callback</td>
+<td>回调函数做参数，当转换完成时就调用这个回调函数</td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>指定的返回的Blob对象的type值，即MIME类型，默认为image/png</td>
+</tr>
+</tbody>
+</table>
+
+<h5 id="使用方法-3">使用方法</h5>
+
+<pre><code>var blob1;
+var blob = canvas.toBlob(function(blob){
+	blob1 = blob;
+},'image/png');
+//这里的blob1就是这个canvas所绘制的这部分图像的数据
+</code></pre>
+
+<h3 id="相互转换">相互转换</h3>
+
+<p>这里是总结一下Blob/File对象与DataURL、canvas之间的转换，也包括了FileReader和createObjectURL的使用</p>
+
+<h5 id="canvas与dataurl">canvas与DataURL</h5>
+
+<pre><code>//就用前面代码中创建的canvas来做演示
+//canvas  &gt;  DataURL
+var dataurl = canvas.toDataURL();//可选参数type，定义dataurl中的数据类型，默认为'image/png';
+
+//DataURL &gt;  canvas
+//先要把DataURL写入一个Image对象中，然后用canvas来绘制
+var img = new Image();//创建Image对象
+var canvas1 = document.createElement('canvas');//创建canvas
+var ctx = canvas1.getContext('2d');
+img.onload = function(){
+    ctx.drawImage(img,0,0);
+}//这个onload是在image对象加载数据完成后调用
+img.src = dataurl;
+</code></pre>
+
+<h5 id="blob-file-与-dataurl">Blob/File 与 DataURL</h5>
+
+<pre><code>//DataURL &gt;  Blob/File
+//假定现在有一个dataurl,现在直接封装一个dataURLToBlob函数
+function dataURLToBlob(dataurl){
+    var arr = dataurl.split(',');
+    var mimeType = arr[0].match(/:(.*?);/)[1];
+    var mainData = arr[1];//这里的数据是一个base64编码的字符串，下面要进行解码才能传给Blob;
+    //这里要用到atob函数将base64编码数据解码(当然也有对应的btoa函数将数据编码成base64数据)
+    var originData = atob(mainData);
+    return new Blob([originData],mimeType);
+}
+
+//Blob/File  &gt;  DataURL
+//这个转换需要FileReader的参与，假定现在有一个file/blob对象可用
+var dataurl;
+var fr = new FileReader();
+fr.onload = function(){
+    dataurl = fr.result;
+}
+fr.readAsDataURL(file/blob);
+</code></pre>
+
+<h5 id="blob-file-与-canvas">Blob/File 与 canvas</h5>
+
+<pre><code>//canvas &gt;  Blob/File
+//假定现在有一个canvas
+var blob;
+canvas.toBlob(function(blob){
+    blob = blob;
+},'image/png');
+//Blob/File  &gt;  canvas
+//这个转换需要FileReader的参与，假定现在有一个file/blob对象可用
+var dataurl;
+var img = new Image();
+var fr = new FileReader();
+fr.onload = function(){
+    dataurl = fr.result;
+    img.src = dataurl;
+}
+img.onload = function(){
+    ctx.drawImage(img,0,0);
+}
+fr.readAsDataURL(file/blob);
+</code></pre>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/" data-tooltip="Flex布局——属性">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 NonymZhou. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/" data-tooltip="Flex布局——属性">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fydwx.github.io%2F2016%2F11%2F%25E5%2585%25B3%25E4%25BA%258Edataurl-blob-file-filereader-createobjecturl-canvas%25E5%258F%258A%25E5%2585%25B6%25E7%259B%25B8%25E4%25BA%2592%25E8%25BD%25AC%25E5%258C%2596%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fydwx.github.io%2F2016%2F11%2F%25E5%2585%25B3%25E4%25BA%258Edataurl-blob-file-filereader-createobjecturl-canvas%25E5%258F%258A%25E5%2585%25B6%25E7%259B%25B8%25E4%25BA%2592%25E8%25BD%25AC%25E5%258C%2596%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fydwx.github.io%2F2016%2F11%2F%25E5%2585%25B3%25E4%25BA%258Edataurl-blob-file-filereader-createobjecturl-canvas%25E5%258F%258A%25E5%2585%25B6%25E7%259B%25B8%25E4%25BA%2592%25E8%25BD%25AC%25E5%258C%2596%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">NonymZhou</h4>
+    
+      <div id="about-card-bio">一个前端爱好者的博客</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        武汉大学在读研究生
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/ydwx.github.io\/2016\/11\/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96\/';
+          
+            this.page.identifier = '\/2016\/11\/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="NonymZhou">
+<meta name="keywords" content="SVG, 贝塞尔曲线, animate, d, development">
+<meta name="description" content="本文介绍SVG的path标签的部分属性和标签，包括d属性、椭圆的实现、贝赛尔曲线的介绍、animate标签等">
+
+
+<meta property="og:description" content="本文介绍SVG的path标签的部分属性和标签，包括d属性、椭圆的实现、贝赛尔曲线的介绍、animate标签等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVG 之 path">
+<meta name="twitter:title" content="SVG 之 path">
+<meta property="og:url" content="https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+<meta property="twitter:url" content="https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+<meta property="og:site_name" content="Nonym Blog">
+<meta property="og:description" content="本文介绍SVG的path标签的部分属性和标签，包括d属性、椭圆的实现、贝赛尔曲线的介绍、animate标签等">
+<meta name="twitter:description" content="本文介绍SVG的path标签的部分属性和标签，包括d属性、椭圆的实现、贝赛尔曲线的介绍、animate标签等">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2016-12-03T00:43:09">
+  
+  
+    <meta property="article:modified_time" content="2016-12-03T00:43:09">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+
+
+    <title>SVG 之 path</title>
+
+    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    
+
+    
+
+    <link rel="canonical" href="https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://ydwx.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://ydwx.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">NonymZhou</h4>
+        
+          <h5 class="sidebar-profile-bio">一个前端爱好者的博客</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      SVG 之 path
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2016-12-03T00:43:09&#43;08:00">
+        
+  December 3, 2016
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>可缩放矢量图形SVG是基于可扩展标记语言……吧啦吧啦（百度百科上的定义嗯）</p>
+
+<p>最近刚刚忙完我们队的一个项目的网站，里面虽然主要用的不是svg，只是很小的一个效果用到了，但是用的时候查阅一下资料啥的感觉像是打开了新世界的大门（可能是太菜的缘故之前都没怎么用过svg）</p>
+
+<p>所以想总结一下关于svg里面的path以及animate用法以及自己的体会</p>
+
+<h3 id="例子"><strong>例子</strong></h3>
+
+<pre><code class="language-html">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; version=&quot;1.1&quot;&gt;
+  &lt;path d=&quot;M150 0 L75 200 L225 200 Z&quot; /&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMjAyMTA0MjM4MDM2?x-oss-process=image/format,png" alt="这里写图片描述" />
+&gt;这里svg就是一个类似于画布的东西，path中最核心的属性就是 &ldquo;<strong>d</strong>&rdquo; 属性，这个属性就像一个虚拟的画笔，根据属性值来绘制图形，上面例子详情：先将画笔移动到svg画布的(150,0)位置，然后画直线（L代表LineTo）到终点(75,200)，再画直线到(225,200)。</p>
+
+<h3 id="d属性预览表"><strong>d属性预览表</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>画笔操作</th>
+<th>参数</th>
+<th>例子</th>
+<th>解释</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>M</td>
+<td>x,y</td>
+<td>M150 40</td>
+<td>画笔移动到画布上一点，位置由M后面的两个数值决定 M150 40 移动到坐标(150,40)</td>
+</tr>
+
+<tr>
+<td>L</td>
+<td>x,y</td>
+<td>L250 0</td>
+<td>画直线到画布上某一点，直线终点位置由L后面的两个数值决定L250 0 画直线到点(250,0)</td>
+</tr>
+
+<tr>
+<td>H</td>
+<td>x</td>
+<td>H50</td>
+<td>画水平直线，H50 纵坐标不变，从当前坐标画水平线到横坐标为50处</td>
+</tr>
+
+<tr>
+<td>V</td>
+<td>y</td>
+<td>V200</td>
+<td>画竖直直线，V50 横坐标不变，从当前坐标画竖直线到纵坐标为50处</td>
+</tr>
+
+<tr>
+<td>C</td>
+<td>x1,y1,x2,y2,x,y</td>
+<td></td>
+<td>三次贝塞尔曲线(三次需要两个控制点(x1 y1 x2 y2)和一个曲线终点(x y))</td>
+</tr>
+
+<tr>
+<td>S</td>
+<td>x2,y2,x,y</td>
+<td></td>
+<td>光滑的三次贝塞尔曲线</td>
+</tr>
+
+<tr>
+<td>Q</td>
+<td>x1,y1,x,y</td>
+<td></td>
+<td>二次贝塞尔曲线(二次需要一个控制点和一个曲线终点)</td>
+</tr>
+
+<tr>
+<td>T</td>
+<td>x,y</td>
+<td></td>
+<td>光滑的二次贝塞尔曲线</td>
+</tr>
+
+<tr>
+<td>A</td>
+<td>rx,ry,x-rotation,flag1,flag2,x2,y2</td>
+<td></td>
+<td>椭圆曲线，rx,ry代表椭圆的两个半轴长，如果想要画圆就将这两个参数设置相等（居然还能记得专业名词不容易2333）<br>x-rotation代表弧线绕x轴的旋转角度<br>flag1表示从起始点到终点是画大角度弧，还是小角度（1为大角度，0为小角度）<br>flag2表示画弧的方向是顺时针还是逆时针（1为顺时针，0为逆时针）<br>x2,y2表示弧线的终点<br>表格后面会给出例子</td>
+</tr>
+
+<tr>
+<td>Z</td>
+<td>无参数</td>
+<td></td>
+<td>结束次路径的绘制</td>
+</tr>
+</tbody>
+</table>
+
+<p>注：小写字符的指令参数和大写字母是一样的，只是后面的参数不是画布上的绝对坐标，而是相对于画笔当前的位置在x和y轴上移动的距离</p>
+
+<h4 id="椭圆例子"><strong>椭圆例子</strong></h4>
+
+<pre><code class="language-html">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;path d=&quot;M60,60  A30,30 0 0,0 85,85&quot;
+	  style=&quot;stroke: yellow; stroke-width:2; fill:none;&quot;/&gt;
+  &lt;path d=&quot;M60,60  A30,30 0 1,0 85,85&quot;
+	  style=&quot;stroke: red; stroke-width:2; fill:none;&quot;/&gt;
+  &lt;path d=&quot;M60,60  A30,30 0 1,1 85,85&quot;
+	  style=&quot;stroke: green; stroke-width:2; fill:none;&quot;/&gt;
+  &lt;path d=&quot;M60,60  A30,30 0 0,1 85,85&quot;
+	  style=&quot;stroke: blue; stroke-width:2; fill:none;&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMjAyMjMyMzU4MzE1?x-oss-process=image/format,png" alt="这里写图片描述" />
+&gt; 首先圆上两点确定，半径确定，能且只能确定两个圆，再由两点连线分隔就是四个圆弧，上面代码一共四条路径，也是四条弧线，首先因为rx和ry都是一样的，所以是正圆弧，x-rotation都是0，主要在于flag1和flag2取不同值的效果，都是从点(60,60)到(85,85)的圆弧，
+&gt; - 第一个path黄色的小圆弧，flag1=0，flag2=0，小角度弧，逆时针
+&gt; - 第二个path红色的小圆弧，flag1=1，flag2=0，大角度弧，逆时针
+&gt; - 第三个path绿色的小圆弧，flag1=1，flag2=1，大角度弧，顺时针
+&gt; - 第四个path蓝色的小圆弧，flag1=0，flag2=1，小角度弧，顺时针</p>
+
+<h3 id="贝塞尔曲线"><strong>贝塞尔曲线</strong></h3>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMjAzMTcyOTEwNjU2?x-oss-process=image/format,png" alt="这里写图片描述" />
+比较懒，这是百度百科上面的关于贝塞尔曲线的公式讲解，咱就只看到三次的好了，通用的太复杂嗯</p>
+
+<p>每个公式里面的P0、P1、P2这些都是对应上面提到的path的d属性中的n次贝塞尔曲线变换（C，S，Q，T）的参数里面的<strong>x1，y1，x2，y2，x，y以及画贝塞尔曲线之前画笔所在的位置（即贝塞尔曲线起始位置）</strong>，每个点的横坐标代入求出点B的横坐标（纵坐标同理）
+咳咳，不过，不管作为一个设计还是前端，估计都很难直接用公式来看曲线样式嗯，所以上面这公式都不重要
+下面主要总结一下path d属性中的C，S，Q，T几种贝塞尔曲线</p>
+
+<h4 id="c-s-三次贝塞尔曲线"><strong>C，S 三次贝塞尔曲线</strong></h4>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMjAzMjAxNjUyNDEw?x-oss-process=image/format,png" alt="这里写图片描述" />
+&gt; 图上的(x1,y1)，(x2,y2)，(x,y) 就是对应与C（Cx1 y1 x2 y2 x y）里面的参数一一对应，(x0,y0)是执行C指令之前画笔的位置
+&gt;
+&gt; S也是三次贝塞尔曲线，但是其参数比C少了一个点，这是因为，S必须在C指令后面使用，C画了(x0,y0)到到(x1,y1)的部分，S会自动把C的(x2,y2)关于(x,y)做中心对称，对称点就是上图右下角的那个点，该点作为S的(x1,y1)，所以后面S的参数只需要指明x2 y2 x y就可以了（接着上面的C的效果画的S的效果见下图）</p>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMjAzMjAxOTUyMzM2?x-oss-process=image/format,png" alt="这里写图片描述" /></p>
+
+<h4 id="q-t-二次贝塞尔曲线"><strong>Q，T 二次贝塞尔曲线</strong></h4>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMjAzMTk1ODQxNjgz?x-oss-process=image/format,png" alt="这里写图片描述" />
+&gt; 二次贝塞尔曲线Q T 其实看起来就相当于把三次贝塞尔曲线的两个<strong>控制点</strong>合二为一
+&gt; 图上的(x1,y1)，(x,y) 就是与Q（Qx1 y1 x y）里面的参数一一对应
+&gt;
+&gt; T也是二次贝塞尔曲线，但是其参数比Q少了一个点，这是因为，T必须在Q指令后面使用，T会自动把Q的(x1,y1)关于(x,y)做中心对称，对称点就是上图右下角的那个点，该点作为T的(x1,y1)，所以后面T的参数只需要指明x y就可以了（接着上面的Q的效果画的T的效果见下图）</p>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMjAzMjAyMzEzNzg3?x-oss-process=image/format,png" alt="这里写图片描述" /></p>
+
+<h3 id="animate标签"><strong>animate标签</strong></h3>
+
+<blockquote>
+<p>animate 标签包裹在path line text 等可以进行动画的元素内部，通过改变外部包裹元素的某些属性来产生动画</p>
+</blockquote>
+
+<pre><code class="language-html">&lt;svg width=&quot;400&quot; height=&quot;200&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;g&gt; 
+    &lt;text font-size=&quot;30&quot; y=&quot;60&quot; x=&quot;0&quot;&gt;
+    这个会左右移动嗯
+      &lt;animate attributeName=&quot;x&quot; from=&quot;0&quot; to=&quot;60&quot; begin=&quot;0s&quot; dur=&quot;3s&quot; repeatCount=&quot;indefinite&quot; /&gt;
+    &lt;/text&gt;
+  &lt;/g&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<blockquote>
+<p>上面这个例子是“这个会左右移动嗯”这几个字的横坐标从0变为60的动画，历时3秒，并且会一直不断重复。</p>
+</blockquote>
+
+<h4 id="animate标签的属性">animate标签的属性</h4>
+
+<ol>
+<li>attributeName
+指定了animate修改的是动画元素的哪个属性，上面例子中就是指定改变text 的x属性即横坐标</li>
+<li>from
+指定属性变化的初始值，例如例子中横坐标初始值是0，也就是从0开始变化</li>
+<li>to
+指定属性变化的终止值，例子中横坐标变化到最大值为60</li>
+<li>begin
+指定动画开始时间，即从svg加载完成开始算</li>
+<li>dur
+动画执行过程需要的时间，也决定了动画的快慢</li>
+<li>end
+动画结束的时刻</li>
+</ol>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/" data-tooltip="从源码分析Node之require">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/" data-tooltip="Flex布局——属性">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 NonymZhou. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/" data-tooltip="从源码分析Node之require">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/" data-tooltip="Flex布局——属性">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fydwx.github.io%2F2016%2F12%2Fsvg-%25E4%25B9%258B-path%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fydwx.github.io%2F2016%2F12%2Fsvg-%25E4%25B9%258B-path%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fydwx.github.io%2F2016%2F12%2Fsvg-%25E4%25B9%258B-path%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">NonymZhou</h4>
+    
+      <div id="about-card-bio">一个前端爱好者的博客</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        武汉大学在读研究生
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/ydwx.github.io\/2016\/12\/svg-%E4%B9%8B-path\/';
+          
+            this.page.identifier = '\/2016\/12\/svg-%E4%B9%8B-path\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

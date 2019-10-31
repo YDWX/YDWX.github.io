@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="NonymZhou">
+<meta name="keywords" content="vim, Linux, vim主题, vim插件, development">
+<meta name="description" content="在公司实习因为一开始事情比较少，所以自己又把以前折腾过但是半路放弃的vim又拿起来了，经过差不多一周的时间的折腾，终于折腾到自己差不多满意的了，包括vim的设置、插件安装和vim主题设置">
+
+
+<meta property="og:description" content="在公司实习因为一开始事情比较少，所以自己又把以前折腾过但是半路放弃的vim又拿起来了，经过差不多一周的时间的折腾，终于折腾到自己差不多满意的了，包括vim的设置、插件安装和vim主题设置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim折腾">
+<meta name="twitter:title" content="vim折腾">
+<meta property="og:url" content="https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+<meta property="twitter:url" content="https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+<meta property="og:site_name" content="Nonym Blog">
+<meta property="og:description" content="在公司实习因为一开始事情比较少，所以自己又把以前折腾过但是半路放弃的vim又拿起来了，经过差不多一周的时间的折腾，终于折腾到自己差不多满意的了，包括vim的设置、插件安装和vim主题设置">
+<meta name="twitter:description" content="在公司实习因为一开始事情比较少，所以自己又把以前折腾过但是半路放弃的vim又拿起来了，经过差不多一周的时间的折腾，终于折腾到自己差不多满意的了，包括vim的设置、插件安装和vim主题设置">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2017-12-14T17:47:20">
+  
+  
+    <meta property="article:modified_time" content="2017-12-14T17:47:20">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+
+
+    <title>vim折腾</title>
+
+    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    
+
+    
+
+    <link rel="canonical" href="https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://ydwx.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://ydwx.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">NonymZhou</h4>
+        
+          <h5 class="sidebar-profile-bio">一个前端爱好者的博客</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      vim折腾
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2017-12-14T17:47:20&#43;08:00">
+        
+  December 14, 2017
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<h3 id="一周-vim-折腾记-ubuntu16-04">一周 vim 折腾记（ubuntu16.04）</h3>
+
+<blockquote>
+<p>在公司实习因为一开始事情比较少，所以自己又把以前折腾过但是半路放弃的vim又拿起来了，经过差不多一周的时间的折腾，终于折腾到自己差不多满意的了</p>
+</blockquote>
+
+<h4 id="vim-安装">vim 安装</h4>
+
+<pre><code class="language-shell">sudo apt install vim
+</code></pre>
+
+<h4 id="vim-设置">vim 设置</h4>
+
+<p>vim安装之后在用户根目录下会有一个 <strong>.vimrc</strong> 的文件，这是vim在当前用户下的配置文件，如果没有请自行创建一个。</p>
+
+<p><strong>.vimrc</strong> 里面用vim的语法定义许多选项，例如补全，背景之类的，下面贴一下我用的配置（暂时没有插件配置，插件配置在下面添加）</p>
+
+<p>下面的配置直接添加到.vimrc里面即可</p>
+
+<pre><code class="language-shell">set nu &quot;行号
+&quot;vim自身命令行命令补全
+set wildmenu &quot;tab auto complete
+set nocp &quot;not vi
+&quot;语法高亮
+syn on &quot;highlight
+&quot;缩进
+set smartindent
+set autoindent
+set softtabstop=2
+set smarttab
+&quot;暗色背景
+set background=dark
+&quot;自动查找，就是点击/输入想要搜索的word之后会自动搜索
+set hlsearch
+set incsearch
+&quot;不生成缓存文件
+set noswapfile
+set encoding=utf-8
+set wrap
+set nobackup
+set autoread
+&quot;关闭vi兼容模式
+set nocompatible
+&quot;缩进空格宽度
+set shiftwidth=2
+&quot;左右分窗口默认在右侧打开
+set splitright
+&quot;上下分窗口默认在下边打开
+set splitbelow
+
+autocmd vimenter * NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 &amp;&amp; !exists(&quot;s:std_in&quot;) | NERDTree | endif
+&quot;vim 颜色主题
+:colorscheme desert
+&quot;vim 对js的补全支持
+autocmd FileType javascript set omnifunc=javascriptcomplete
+&quot;当前行高亮
+autocmd InsertLeave,WinEnter * set cursorline
+autocmd InsertEnter,WinLeave * set nocursorline
+&quot;自定义ctrl+j和ctrl+k 用来上下移动某一行
+nnoremap &lt;c-j&gt; :move .+1&lt;CR&gt;
+nnoremap &lt;c-k&gt; :move .-2&lt;CR&gt;
+
+&quot;emmet 配置，全局生效
+let g:user_emmet_mode='a'
+&quot;自定义多窗口时调节窗口大小快捷键
+nnoremap w= :resize+3&lt;CR&gt;
+nnoremap w- :resize-3&lt;CR&gt;
+nnoremap v= :vertical resize+3&lt;CR&gt;
+nnoremap v- :vertical resize-3&lt;CR&gt;
+hi Normal  ctermfg=252 ctermbg=none
+&quot;powerline 的配置，powerline是一个使vim和bash有一个很华丽的状态栏的工具
+set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
+set laststatus=2
+set t_Co=256
+</code></pre>
+
+<h4 id="vim-插件"><strong>vim 插件</strong></h4>
+
+<p><strong>1  插件管理工具安装</strong></p>
+
+<p>插件可以去github上手动下载相应的包在本地安装，也可以用一些插件管理工具，之前用过vundle，这次看到很多人推荐vim-plug，就来试一下，vim-plug地址：<a href="https://github.com/junegunn/vim-plug">https://github.com/junegunn/vim-plug</a> 按照教程安装即可</p>
+
+<p><strong>2 .vimrc 配置</strong></p>
+
+<p>vim-plug 安装插件有一定的格式，在.vimrc中添加以下代码，<strong><em>Plug &ldquo;xxxxx/xxxx&rdquo;</em></strong> 是要安装的插件，而引号中的则是这个插件库在github上的名字，注意：所有的要安装的插件的声明都要在 <code>call plug#begin('~/.vim/plugged')</code> 和  <code>call plug#end()</code>这两行之间，begin中说明的时插件的安装位置</p>
+
+<pre><code class="language-shell">&quot;插件配置
+call plug#begin('~/.vim/plugged')
+Plug 'mattn/emmet-vim' 
+Plug 'isRuslan/vim-es6'
+Plug 'maksimr/vim-jsbeautify'
+Plug 'Valloric/YouCompleteMe'
+Plug 'pangloss/vim-javascript'
+Plug 'gregsexton/MatchTag'
+Plug 'dimasg/vim-mark'
+Plug 'tpope/vim-surround'
+Plug 'kien/ctrlp.vim'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tpope/vim-commentary'
+Plug 'djfrmd/VimColorizer'
+Plug 'marijnh/tern_for_vim'
+Plug 'scrooloose/nerdtree'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'suan/vim-instant-markdown'
+call plug#end()
+</code></pre>
+
+<p><strong>3 安装插件</strong></p>
+
+<p>在vim的normal模式下 输入 <strong>:PlugInstall</strong> vim-plug就会自动帮你安装</p>
+
+<h4 id="vim-主题"><strong>vim 主题</strong></h4>
+
+<p>好了到了大家最关注的皮肤环节了，为了让vim显得好看一点，也是煞费苦心（并不233）</p>
+
+<p>ubuntu下vim会默认安装好一些主题，这些主题存放在 <code>/usr/share/vim/vim74/colors/</code> 目录下，设置这些主题只要在 <strong>.vimrc</strong> 中添加这样一句即可 <code>:colorsheme xxxx</code> 。</p>
+
+<p>如果默认安装的主题中没有，那么需要自己先安装这个主题，安装也很简单，只要把主题库中的相应的 xxxx.vim 文件放到 <strong>~/.vim/colors/</strong> 中即可，然后再在 .vimrc 中添加上面的colorscheme配置。</p>
+
+<h4 id="状态栏美化-powerline安装"><strong>状态栏美化（powerline安装）</strong></h4>
+
+<p>这个包括vim和bash以及zsh等终端</p>
+
+<p><strong>1.安装powerline</strong></p>
+
+<p>这是一个python的库，通过pip来安装</p>
+
+<pre><code class="language-shell">#安装pip
+sudo apt install pip
+#安装powerline
+pip install git+git://github.com/powerline/powerline
+</code></pre>
+
+<p><strong>2.安装powerline需要的字体</strong></p>
+
+<pre><code class="language-shell"># 下载字体文件
+wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+# 下载字体配置文件
+wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+</code></pre>
+
+<p>然后把字体文件放到 <code>/usr/share/fonts/</code> 目录下，</p>
+
+<pre><code class="language-shell">mv PowerlineSymbols.otf /usr/share/fonts/
+</code></pre>
+
+<p>更新字体缓存</p>
+
+<pre><code class="language-shell">fc-cache -vf /usr/share/fonts/
+</code></pre>
+
+<p>安装字体配置文件</p>
+
+<pre><code class="language-shell">mv 10-powerline-symbols.conf /etc/fonts/conf.d/
+</code></pre>
+
+<p><strong>3.给zsh和vim配置powerline</strong></p>
+
+<p><strong>zsh</strong></p>
+
+<p>首先通过命令来查看powerline的安装位置</p>
+
+<pre><code class="language-shell">pip show powerline-status
+</code></pre>
+
+<p>然后在bash或者zsh的配置文件中（也就是~/.bashrc  ~/.zshrc）中添加如下代码</p>
+
+<pre><code class="language-shell">powerline-daemon -q
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
+. /usr/local/lib/python2.7/dist-packages/powerline/bindings/zsh/powerline.sh 
+</code></pre>
+
+<p>注意最后一行是powerline的安装位置，要根据上面查询的位置填写</p>
+
+<p>这样关闭终端再打开就可以看到效果了</p>
+
+<p><strong>vim</strong></p>
+
+<p>vim 只要在 .vimrc 中添加下面的内容即可</p>
+
+<pre><code class="language-shell">set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
+set laststatus=2
+set t_Co=256
+</code></pre>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2018/08/linux%E6%A0%B9%E7%9B%AE%E5%BD%95%E6%89%A9%E5%AE%B9%E6%96%B9%E6%B3%95%E5%8F%8A%E5%85%B6%E6%B6%89%E5%8F%8A%E7%9A%84%E7%9B%B8%E5%85%B3%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/" data-tooltip="Linux根目录扩容方法及其涉及的相关磁盘操作">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/" data-tooltip="从源码分析Node之require">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 NonymZhou. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2018/08/linux%E6%A0%B9%E7%9B%AE%E5%BD%95%E6%89%A9%E5%AE%B9%E6%96%B9%E6%B3%95%E5%8F%8A%E5%85%B6%E6%B6%89%E5%8F%8A%E7%9A%84%E7%9B%B8%E5%85%B3%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/" data-tooltip="Linux根目录扩容方法及其涉及的相关磁盘操作">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/" data-tooltip="从源码分析Node之require">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fydwx.github.io%2F2017%2F12%2Fvim%25E6%258A%2598%25E8%2585%25BE%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fydwx.github.io%2F2017%2F12%2Fvim%25E6%258A%2598%25E8%2585%25BE%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fydwx.github.io%2F2017%2F12%2Fvim%25E6%258A%2598%25E8%2585%25BE%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">NonymZhou</h4>
+    
+      <div id="about-card-bio">一个前端爱好者的博客</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        武汉大学在读研究生
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/ydwx.github.io\/2017\/12\/vim%E6%8A%98%E8%85%BE\/';
+          
+            this.page.identifier = '\/2017\/12\/vim%E6%8A%98%E8%85%BE\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

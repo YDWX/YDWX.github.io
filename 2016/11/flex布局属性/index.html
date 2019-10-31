@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="NonymZhou">
+<meta name="keywords" content="Flex布局, flex, development">
+<meta name="description" content="详细介绍Flex布局的属性，父元素的属性和子元素的属性，其中包括水平垂直居中等常用的布局方式。">
+
+
+<meta property="og:description" content="详细介绍Flex布局的属性，父元素的属性和子元素的属性，其中包括水平垂直居中等常用的布局方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flex布局——属性">
+<meta name="twitter:title" content="Flex布局——属性">
+<meta property="og:url" content="https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+<meta property="twitter:url" content="https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+<meta property="og:site_name" content="Nonym Blog">
+<meta property="og:description" content="详细介绍Flex布局的属性，父元素的属性和子元素的属性，其中包括水平垂直居中等常用的布局方式。">
+<meta name="twitter:description" content="详细介绍Flex布局的属性，父元素的属性和子元素的属性，其中包括水平垂直居中等常用的布局方式。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2016-11-30T23:19:47">
+  
+  
+    <meta property="article:modified_time" content="2016-11-30T23:19:47">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+
+
+    <title>Flex布局——属性</title>
+
+    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    
+
+    
+
+    <link rel="canonical" href="https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://ydwx.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://ydwx.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">NonymZhou</h4>
+        
+          <h5 class="sidebar-profile-bio">一个前端爱好者的博客</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Flex布局——属性
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2016-11-30T23:19:47&#43;08:00">
+        
+  November 30, 2016
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<h3 id="简介">简介</h3>
+
+<p>现在网页布局比较流行的是div布局，但是深有体会的是例如垂直居中就不是很容易实现，虽然网上给了好多方案，但都稍麻烦；相对来说，Flex布局就可以用简简单单几个属性就能完成各种各样的布局</p>
+
+<h5 id="有人可能会担心浏览器的支持">有人可能会担心浏览器的支持</h5>
+
+<table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>支持的版本</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>IE</td>
+<td>10+</td>
+</tr>
+
+<tr>
+<td>FireFox</td>
+<td>22+</td>
+</tr>
+
+<tr>
+<td>Chrome</td>
+<td>21+</td>
+</tr>
+
+<tr>
+<td>Opera</td>
+<td>12.1+</td>
+</tr>
+
+<tr>
+<td>Safari</td>
+<td>6.1+</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTYxMTMwMjI1MjI3NzM5?x-oss-process=image/format,png" alt="ie6die" /></p>
+
+<h3 id="属性">属性</h3>
+
+<p>要使用Flex布局首先要建立一个Flex容器，即在任何一个元素上添加</p>
+
+<pre><code class="language-html">&lt;div class='container'&lt;!-容器--
+    &lt;div class='item'&lt;/div&lt;!-项目--
+    &lt;div class='item'&lt;/div
+    &lt;div class='item'&lt;/div
+&lt;/div
+</code></pre>
+
+<pre><code class="language-css">.container{
+    display:flex;
+    display:-webkit-flex;//webkit内核浏览器需要添加的
+}
+</code></pre>
+
+<p>整个容器有两个轴，主轴（默认水平，相当于x轴）和交叉轴（默认垂直，相当于y轴）</p>
+
+<h5 id="其他在容器上使用的属性">其他在容器上使用的属性</h5>
+
+<ol>
+<li><p>flex-direction</p>
+
+<p>规定其子元素即项目的排列方式，<strong>规定了主轴的方向</strong>，因为后面的属性都以主轴为标准，所以会影响到后面的属性</p>
+
+<p><strong>属性值</strong></p>
+
+<ul>
+<li>row: 主轴水平，从左到右</li>
+<li>row-reverse: 主轴水平，从右到左</li>
+<li>column: 主轴垂直，从上到下</li>
+<li>column-reverse: 主轴垂直，从下到上</li>
+</ul></li>
+
+<li><p>flex-wrap</p>
+
+<p>flex-direction虽然规定了排列方式，但是如果元素超过了一行怎么办，so <code>flex-wrap</code>属性规定了项目如果超过一行，要如何换行</p>
+
+<p><strong>属性值</strong></p>
+
+<ul>
+<li>nowrap: 强制排列在一行，宽度等分，这时<code>width</code>规定的宽度会失效</li>
+<li>wrap: 自动换行，即正常的换行，第一行显示不完，自动换到第二行从左到右显示</li>
+<li>wrap-reverse： 换行，但是这种是按行倒着排列，即假设有两行，则第二行显示在前面，第一行显示在第二行下面</li>
+</ul></li>
+
+<li><p>flex-flow</p>
+
+<p>这个属性就是把flex-direction和flex-flow写在一起，例如 <code>flex-flow: row wrap-reverse</code></p></li>
+
+<li><p>justify-content</p>
+
+<p>规定了项目<strong>整体</strong>在主轴上的排列方式，即一行一行地</p>
+
+<p><strong>属性值</strong>（假设在主轴水平从左到右的情况下）</p>
+
+<ul>
+<li>flex-start: 每一行项目靠左</li>
+<li>flex-end: 每一行项目靠右</li>
+<li>center: 每一行项目居住靠拢</li>
+<li>space-between: 每两个项目中间间距相同，左右两端项目紧挨容器边界</li>
+<li>space-around: 例如某一行3个项目，则每一行的剩余宽度等分成6份，每个项目两侧两份，且不共用</li>
+</ul></li>
+
+<li><p>align-content</p>
+
+<p>规定了项目<strong>整体</strong>在交叉轴上的排列方式</p>
+
+<p><strong>属性值（假设在主轴水平从左到右的情况下）</strong></p>
+
+<ul>
+<li>flex-start: 整体靠上</li>
+<li>flex-end: 整体靠下</li>
+<li>center: 垂直居中</li>
+<li>space-between: 第一行靠顶端，最后一行靠底端，中间每两行间距相同（即 将剩下的高度等分）</li>
+<li>space-around: 假如有3行，则将除了每一行的高度剩余的高度等分成6份，每一行上下两份且不共用</li>
+</ul></li>
+
+<li><p>align-items</p>
+
+<p>规定了每个项目在交叉轴上的位置</p>
+
+<p><strong>属性值</strong></p>
+
+<ul>
+<li>flex-start: 靠上</li>
+<li>flex-end: 靠下</li>
+<li>center: 垂直居中</li>
+<li>stretch: 项目高度拉伸占满整个父元素的高度</li>
+<li>baseline: 项目的第一行文字的基线对齐。</li>
+</ul></li>
+</ol>
+
+<h4 id="在项目上使用的属性">在项目上使用的属性</h4>
+
+<ol>
+<li><p>order</p>
+
+<p>规定了元素的顺序（order规定的顺序值可以打乱html中的结构中的顺序）</p>
+
+<p><strong>属性值：</strong> 就是一个整数值，越小越靠前</p></li>
+
+<li><p>flex-grow</p>
+
+<p>规定主轴上一行的元素的放大比例，即对剩余空间的分配，如果一行地元素都没有设置宽度，那么就是将这一行的宽度按照flex-grow的值进行比例分配</p>
+
+<p><strong>属性值：</strong>同样也是数值</p></li>
+
+<li><p>flex-shrink</p>
+
+<p>与flex-grow对应，规定了元素的缩小比例，默认值为1，即父元素的宽度减小的时候，这些元素的宽度等比例缩小</p>
+
+<p><strong>属性值：</strong>数值（大于等于0，决定缩小比例，一个项目该属性值为0的时候，不进行缩小）</p></li>
+
+<li><p>flex-basis</p>
+
+<p>规定了一个项目的宽度，和width效果基本相同</p></li>
+
+<li><p>flex</p>
+
+<p>这是上面三个属性flex-grow、flex-shrink、flex-basis的简写</p></li>
+
+<li><p>align-self
+规定了该项目在交叉轴上的位置，可以覆盖align-items</p>
+
+<p><strong>属性值</strong></p>
+
+<ul>
+<li>flex-start: 靠上</li>
+<li>flex-end: 靠下</li>
+<li>center: 垂直居中</li>
+<li>stretch: 项目高度拉伸占满整个父元素的高度</li>
+<li>baseline: 项目的第一行文字的基线对齐。</li>
+<li>auto: 这个是指该项目的交叉轴上的位置由父元素的align-items决定</li>
+</ul></li>
+</ol>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/" data-tooltip="SVG 之 path">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/" data-tooltip="关于DataURL  Blob  File  FileReader  createObjectURL  canvas及其相互转化">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 NonymZhou. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/" data-tooltip="SVG 之 path">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/" data-tooltip="关于DataURL  Blob  File  FileReader  createObjectURL  canvas及其相互转化">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fydwx.github.io%2F2016%2F11%2Fflex%25E5%25B8%2583%25E5%25B1%2580%25E5%25B1%259E%25E6%2580%25A7%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fydwx.github.io%2F2016%2F11%2Fflex%25E5%25B8%2583%25E5%25B1%2580%25E5%25B1%259E%25E6%2580%25A7%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fydwx.github.io%2F2016%2F11%2Fflex%25E5%25B8%2583%25E5%25B1%2580%25E5%25B1%259E%25E6%2580%25A7%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">NonymZhou</h4>
+    
+      <div id="about-card-bio">一个前端爱好者的博客</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        武汉大学在读研究生
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/ydwx.github.io\/2016\/11\/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7\/';
+          
+            this.page.identifier = '\/2016\/11\/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

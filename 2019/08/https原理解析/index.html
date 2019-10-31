@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="NonymZhou">
+<meta name="keywords" content="HTTPS, 对称加密, 非对称加密, development">
+<meta name="description" content="详细介绍HTTPS的原理，包括非对称加密的过程，公钥证书的验证和CA整数的申请流程">
+
+
+<meta property="og:description" content="详细介绍HTTPS的原理，包括非对称加密的过程，公钥证书的验证和CA整数的申请流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTPS原理解析">
+<meta name="twitter:title" content="HTTPS原理解析">
+<meta property="og:url" content="https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+<meta property="twitter:url" content="https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+<meta property="og:site_name" content="Nonym Blog">
+<meta property="og:description" content="详细介绍HTTPS的原理，包括非对称加密的过程，公钥证书的验证和CA整数的申请流程">
+<meta name="twitter:description" content="详细介绍HTTPS的原理，包括非对称加密的过程，公钥证书的验证和CA整数的申请流程">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-08-22T23:53:33">
+  
+  
+    <meta property="article:modified_time" content="2019-08-22T23:53:33">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+
+
+    <title>HTTPS原理解析</title>
+
+    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    
+
+    
+
+    <link rel="canonical" href="https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://ydwx.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://ydwx.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">NonymZhou</h4>
+        
+          <h5 class="sidebar-profile-bio">一个前端爱好者的博客</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      HTTPS原理解析
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-08-22T23:53:33&#43;08:00">
+        
+  August 22, 2019
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>开门见山地说，众所周知，HTTPS=HTTP+SSL/TLS，使用非对称加密算法+对称加密算法的混合加密算法。</p>
+
+<p>最近在面试过程中被问到几次这个问题，看过几篇博客，说的都不是很清楚，理解也有偏差，毫无意外的面试都挂了，今天看到了阮一峰老师的博客——<a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS
+协议</a>，终于有一种醍醐灌顶的感觉。</p>
+
+<h3 id="关键点">关键点</h3>
+
+<ul>
+<li>对称加密算法的秘密密钥用于<strong>加密正文数据（即建立SSL连接后客户端与服务器之间传输的用户数据）</strong></li>
+<li>非对称加密算法用来保证<strong>对称加密算法的秘密密钥的传递（客户端生成秘密密钥，传递给服务器）</strong></li>
+</ul>
+
+<h3 id="整体流程">整体流程</h3>
+
+<ol>
+<li><strong>五次握手</strong>建立SSL连接：该部分主要为了产生后续传输数据的秘密密钥</li>
+<li>建立连接后，后续就与非对称加密算法没有关系了，后续使用对称加密的秘密密钥进行数据交互。</li>
+</ol>
+
+<h3 id="ssl五次握手">SSL五次握手</h3>
+
+<p>先上图（图片出自阮一峰老师的博客，地址在文章开头）
+<img src="https://img-blog.csdnimg.cn/20190822202526123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2g5Nzk5ODU3NzM=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" /></p>
+
+<blockquote>
+<p>下面流程中的公钥和私钥均指非对称加密算法的公钥和私钥）</p>
+</blockquote>
+
+<ol>
+<li>客户端发送<code>client random</code>——随机数1和<code>cipher suites supported</code>——客户端支持的加密算法给服务器</li>
+<li>服务器把<code>server random</code>——随机数2、对称加密算法（在客户端支持的加密算法范围中确认一个）以及包含公钥证书发送给客户端</li>
+<li>客户端接收到第二步的信息之后，<strong>需要确认公钥证书（记住这个证书只包含公钥）是来自服务器的</strong>，这我们后面再说，确认之后，生成一个<code>Premaster secret</code>——随机数3（预主密钥），并使用公钥证书中的公钥加密<code>Premaster secret</code>，得到<code>Encrypted premaster secret</code>并将其发送给服务器</li>
+<li>服务器收到<code>Encrypted premaster secret</code>并使用私钥解密得到<code>Premaster secret</code>。（OK，到此为止，客服端和服务器均有了随机数1、随机数2和随机数3）</li>
+<li>客服端和服务器使用三个随机数和第二步约定的加密算法生成<strong>秘密密钥</strong>，用于后面传输数据时明文数据的加密</li>
+</ol>
+
+<p>现在，SSL连接已经建立了，从上面的流程可以看出来：非对称加密算法只用过一次，非对称加密算法本身的性能消耗很大，使用频繁很消耗性能。</p>
+
+<h3 id="ca证书机构">CA证书机构</h3>
+
+<p>刚刚我们上面遗留了一个问题，五次握手第二步服务器发送给客户端的<strong>公钥证书</strong>有可能被中间人截取并篡改，那么客户端如何确认公钥证书是来自服务器而不是中间人呢？</p>
+
+<p>这里CA证书机构就要上场了，在介绍这个过程前需要先介绍几个概念：摘要、数字签名</p>
+
+<blockquote>
+<p><strong>摘要</strong>：通过<strong>单向</strong>hash函数对原文进行哈希，将需加密的明文“摘要”成一串固定长度(如128bit)的密文，不同的明文摘要成的密文其结果总是不相同，同样的明文其摘要必定一致，并且即使知道了摘要也不能反推出明文。
+<strong>数字签名</strong>：建立在公钥加密体制基础上，是公钥加密技术的另一类应用。它把公钥加密技术和数字摘要结合起来，形成了实用的数字签名技术。
+（以上摘自<a href="https://blog.csdn.net/xiaoming100001/article/details/81109617）">https://blog.csdn.net/xiaoming100001/article/details/81109617）</a></p>
+</blockquote>
+
+<h4 id="ca证书申请流程">CA证书申请流程</h4>
+
+<blockquote>
+<p>下面陈述中，单独的公钥私钥依然指服务器的公钥和私钥，CA私钥、公钥会特别说明</p>
+</blockquote>
+
+<ol>
+<li>服务器S向CA机构提交公钥、组织信息、个人信息(域名)等信息并申请认证</li>
+<li>CA 通过线上、线下等多种手段验证申请者提供信息的真实性，如组织是否存在、企业是否合法，是否拥有域名的所有权等</li>
+<li>如果审核通过则向S颁发证书，证书信息包含<strong>申请者公钥、申请者的组织信息和个人信息、签发机构 CA 的信息、有效时间、证书序列号等信息的<code>明文</code>，同时包含一个<code>签名</code></strong>，该签名生成方法：证书信息明文经过hash散列函数生成摘要，然后通过CA私钥对摘要进行加密生成的密文就是数字签名。</li>
+</ol>
+
+<h4 id="客户端验证公钥证书">客户端验证公钥证书</h4>
+
+<p>OK，介绍了这么多，终于要介绍前面遗留的问题了。</p>
+
+<ol>
+<li>现在的情况是，服务器拥有了CA机构颁发的证书和CA公钥，客户端拥有CA公钥（浏览器内置CA根证书）。</li>
+<li>服务器将包含公钥的证书发送给客户端（这里指浏览器），证书中包含公钥、组织信息、有效期等信息，还有一个CA私钥加密过的数字签名。</li>
+<li>客户端使用CA公钥对数字签名解密得到摘要1；客户端读取证书中的相关的明文信息，采用相同的散列函数计算得到摘要2，对比摘要1和摘要2，相等则说明证书有效。</li>
+</ol>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/10/border-radius%E8%AF%A6%E8%A7%A3%E5%88%86%E4%BA%AB/" data-tooltip="border-radius详解分享">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2018/08/linux%E6%A0%B9%E7%9B%AE%E5%BD%95%E6%89%A9%E5%AE%B9%E6%96%B9%E6%B3%95%E5%8F%8A%E5%85%B6%E6%B6%89%E5%8F%8A%E7%9A%84%E7%9B%B8%E5%85%B3%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/" data-tooltip="Linux根目录扩容方法及其涉及的相关磁盘操作">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 NonymZhou. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/10/border-radius%E8%AF%A6%E8%A7%A3%E5%88%86%E4%BA%AB/" data-tooltip="border-radius详解分享">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2018/08/linux%E6%A0%B9%E7%9B%AE%E5%BD%95%E6%89%A9%E5%AE%B9%E6%96%B9%E6%B3%95%E5%8F%8A%E5%85%B6%E6%B6%89%E5%8F%8A%E7%9A%84%E7%9B%B8%E5%85%B3%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/" data-tooltip="Linux根目录扩容方法及其涉及的相关磁盘操作">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2019/08/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fydwx.github.io%2F2019%2F08%2Fhttps%25E5%258E%259F%25E7%2590%2586%25E8%25A7%25A3%25E6%259E%2590%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fydwx.github.io%2F2019%2F08%2Fhttps%25E5%258E%259F%25E7%2590%2586%25E8%25A7%25A3%25E6%259E%2590%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fydwx.github.io%2F2019%2F08%2Fhttps%25E5%258E%259F%25E7%2590%2586%25E8%25A7%25A3%25E6%259E%2590%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">NonymZhou</h4>
+    
+      <div id="about-card-bio">一个前端爱好者的博客</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        武汉大学在读研究生
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/ydwx.github.io\/2019\/08\/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90\/';
+          
+            this.page.identifier = '\/2019\/08\/https%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

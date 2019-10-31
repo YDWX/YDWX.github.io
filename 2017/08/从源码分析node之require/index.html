@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="NonymZhou">
+<meta name="keywords" content="Node.js, require, 源码, development">
+<meta name="description" content="从源码层面，分析node中的require的工作流程及其实现方式，包括目标文件路径分析查找、扩展名处理以及模块加载后的运行方式等">
+
+
+<meta property="og:description" content="从源码层面，分析node中的require的工作流程及其实现方式，包括目标文件路径分析查找、扩展名处理以及模块加载后的运行方式等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从源码分析Node之require">
+<meta name="twitter:title" content="从源码分析Node之require">
+<meta property="og:url" content="https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+<meta property="twitter:url" content="https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+<meta property="og:site_name" content="Nonym Blog">
+<meta property="og:description" content="从源码层面，分析node中的require的工作流程及其实现方式，包括目标文件路径分析查找、扩展名处理以及模块加载后的运行方式等">
+<meta name="twitter:description" content="从源码层面，分析node中的require的工作流程及其实现方式，包括目标文件路径分析查找、扩展名处理以及模块加载后的运行方式等">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2017-08-07T02:06:10">
+  
+  
+    <meta property="article:modified_time" content="2017-08-07T02:06:10">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+
+
+    <title>从源码分析Node之require</title>
+
+    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    
+
+    
+
+    <link rel="canonical" href="https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://ydwx.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://ydwx.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">NonymZhou</h4>
+        
+          <h5 class="sidebar-profile-bio">一个前端爱好者的博客</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      从源码分析Node之require
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2017-08-07T02:06:10&#43;08:00">
+        
+  August 7, 2017
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<blockquote>
+<p>关于Node中Module这里不多说了（node把每一个文件都看成一个Module 的实例），只看整个分析流程</p>
+</blockquote>
+
+<p>本文这只是一种情况，如果是引用node内部模块则是有些不同的流程
+require开始</p>
+
+<pre><code class="language-javascript">//E:\\SVNPRO\node_modules\***\bin\proxy\index.js
+require('util/nodeVersion.js')
+</code></pre>
+
+<p>这里执行之后会走到</p>
+
+<pre><code class="language-javascript">function require(path) {
+  try {
+    exports.requireDepth += 1;
+    return self.require(path);
+  } finally {
+    exports.requireDepth -= 1;
+  }
+}
+</code></pre>
+
+<p>requireDepth指的是引用的深度，重点是<code>self.require(path)</code></p>
+
+<pre><code class="language-javascript">Module.prototype.require = function(path) {
+  assert(path, 'missing path');
+  assert(typeof path === 'string', 'path must be a string');
+  return Module._load(path, this, /* isMain */ false);
+};
+</code></pre>
+
+<p>以上全部的path在该例子中值都是<strong>&lsquo;util/nodeVersion.js&rsquo;</strong>，到了<code>Module._load(path, this, /* isMain */ false)</code></p>
+
+<p>重点来了，这个函数有点长</p>
+
+<pre><code class="language-javascript">Module._load = function(request, parent, isMain) {
+  if (parent) {
+    debug('Module._load REQUEST %s parent: %s', request, parent.id);
+  }
+
+  var filename = Module._resolveFilename(request, parent, isMain);
+
+  var cachedModule = Module._cache[filename];
+  if (cachedModule) {
+    return cachedModule.exports;
+  }
+
+  if (NativeModule.nonInternalExists(filename)) {
+    debug('load native module %s', request);
+    return NativeModule.require(filename);
+  }
+
+  var module = new Module(filename, parent);
+
+  if (isMain) {
+    process.mainModule = module;
+    module.id = '.';
+  }
+
+  Module._cache[filename] = module;
+
+  tryModuleLoad(module, filename);
+
+  return module.exports;
+};
+</code></pre>
+
+<p>这里的request是<strong>&lsquo;util/nodeVersion.js&rsquo;</strong>，parent是指最开始执行 <code>require('util/nodeVersion.js')</code>代码的文件，就是index.js，也是一个module（模块），parent属性的值是</p>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwODA2MjMyOTQ5NjM1?x-oss-process=image/format,png" alt="这里写图片描述" /></p>
+
+<blockquote>
+<p>顺便说一下Module，每一个module实例都有上图这些属性
+children 数组：是该module require了哪些模块
+exports：就是该文件（模块）开放给外部调用接口，<code>module.exports=somethingToexports</code>中的somethingToexports
+&gt; loaded：是否已经被加载过，加载过的模块会添加到<strong>Module._cache</strong>中
+&gt; parent：require过该模块的模块
+&gt; paths：指所有有可能包含该模块的路径，通常是从当前目录到根目录每一级目录下的node_modules文件夹
+&gt; resolveFilenameCache：指的是index.js中前面require过的已经引入的模块，每引入一个模块都会把它加到这个属性中，后面会看到</p>
+
+<pre><code class="language-javascript">var filename = Module._resolveFilename(request, parent, isMain);
+</code></pre>
+
+<p>这一句是根据模块名和parent来获取到该模块的绝对地址</p>
+
+<p>新开一个分支来看  Module._resolveFilename (sea-node.js)</p>
+
+<p>```javascript
+//sea-node.js
+Module._resolveFilename = function(request, parent) {
+  var res;
+  //request = request.replace(/\?.*$/, &ldquo;) // remove timestamp etc.</p>
+</blockquote>
+
+<p>//性能优化
+  if(parent.resolveFilenameCache){
+	if(parent.resolveFilenameCache[request]){
+	  return parent.resolveFilenameCache[request]
+	}
+  }else{
+  	parent.resolveFilenameCache = {};
+  }</p>
+
+<p>res = _resolveFilename(request, parent);</p>
+
+<p>parent.resolveFilenameCache[request] = res;</p>
+
+<p>return res;
+}</p>
+
+<pre><code>该函数中，先检查parent中resolveFilenameCache中是否包含要引入的模块（就是request参数），如果有说明之前require过，直接返回即可
+如果没有，执行```_resolveFilename(request, parent);```，这个函数和上面的函数名字一样，但是在不同文件，不是一个函数
+
+再下一层分支看  Module._resolveFilename (module.js)
+</code></pre>
+
+<p>javascript
+//module.js
+Module._resolveFilename = function(request, parent, isMain) {
+  if (NativeModule.nonInternalExists(request)) {
+    return request;
+  }</p>
+
+<p>var resolvedModule = Module._resolveLookupPaths(request, parent);
+  var id = resolvedModule[0];
+  var paths = resolvedModule[1];</p>
+
+<p>// look up the filename first, since that&rsquo;s the cache key.
+  debug(&lsquo;looking for %j in %j&rsquo;, id, paths);</p>
+
+<p>var filename = Module._findPath(request, paths, isMain);
+  if (!filename) {
+    var err = new Error(&ldquo;Cannot find module &lsquo;&rdquo; + request + &ldquo;&rsquo;&rdquo;);
+    err.code = &lsquo;MODULE_NOT_FOUND&rsquo;;
+    throw err;
+  }
+  return filename;
+};</p>
+
+<pre><code>Module._resolveLookupPaths 函数是利用parent和request来得到所有可能的存放该模块的地址（如C盘下的.node_modules），例如本例中返回的resolvedModule值为
+![这里写图片描述](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwODA3MDA1MDAyODAz?x-oss-process=image/format,png)
+数组第一个元素是request值，第二个元素是parent.paths和其他可能的存放模块的地址的组合
+Module._findPath函数做的事对paths数组进行遍历，并对可能的文件（.js .json .node）后缀都进行测试，直到找到这个文件，返回的filename是该模块的绝对路径
+
+之后这个函数运行结束，跳出来到上一个_resolveFilename(sea-node.js)中只剩最后一句```parent.resolveFilenameCache[request] = res;```，这是之前说过的，找到该模块后就把它添加到parent的resolveFilenameCache中，说明已经引用过。
+这样再上一层到 _load 函数中，下面是按照顺序寻找该模块：
+1. Module._cache：缓存中
+2. NativeModule：Node的“土著”模块（自带的，例如http，fs等）
+3. 上面两个都没有，再新建模块 ```var module = new Module(filename, parent);```，这时候module.exports里面还啥都没有，还并没有读取文件内容。
+
+</code></pre>
+
+<p>Module._cache[filename] = module;```这一句代码则是将该模块加到缓存中去，以便下次可以直接从缓存中获取。</p>
+
+<h4 id="重点来了"><strong>重点来了！！！</strong></h4>
+
+<pre><code class="language-tryModuleLoad(module,"></code></pre>
+
+<p>javascript
+Module.prototype.load = function(filename) {
+  debug(&lsquo;load %j for module %j&rsquo;, filename, this.id);</p>
+
+<p>assert(!this.loaded);
+  this.filename = filename;
+  this.paths = Module._nodeModulePaths(path.dirname(filename));</p>
+
+<p>var extension = path.extname(filename) || &lsquo;.js&rsquo;;
+  if (!Module._extensions[extension]) extension = &lsquo;.js&rsquo;;
+  Module._extensions<a href="this, filename">extension</a>;
+  this.loaded = true;
+};</p>
+
+<pre><code>通过```path.extname()```获取该模块文件的扩展名，Module._extesions是一个Object，包含对应每一个后缀文件的处理函数（.js .json .node 三种），这里是js文件所以我们直接进入该函数看
+</code></pre>
+
+<p>javascript
+Module._extensions[&lsquo;.js&rsquo;] = function(module, filename) {
+  var content = fs.readFileSync(filename, &lsquo;utf8&rsquo;);
+  module._compile(internalModule.stripBOM(content), filename);
+};</p>
+
+<pre><code>先读取文件内容，然后调用module._compile处理content
+
+</code></pre>
+
+<p>javascript
+Module.prototype._compile = function(content, filename) {
+  // Remove shebang
+  var contLen = content.length;
+  if (contLen &gt;= 2) {
+    if (content.charCodeAt(0) === 35/<em>#</em>/ &amp;&amp;
+        content.charCodeAt(1) === 33/<em>!</em>/) {
+      if (contLen === 2) {
+        // Exact match
+        content = &ldquo;;
+      } else {
+        // Find end of shebang line and slice it off
+        var i = 2;
+        for (; i &lt; contLen; ++i) {
+          var code = content.charCodeAt(i);
+          if (code === 10/<em>\n</em>/ || code === 13/<em>\r</em>/)
+            break;
+        }
+        if (i === contLen)
+          content = &ldquo;;
+        else {
+          // Note that this actually includes the newline character(s) in the
+          // new output. This duplicates the behavior of the regular expression
+          // that was previously used to replace the shebang line
+          content = content.slice(i);
+        }
+      }
+    }
+  }
+  // create wrapper function
+  var wrapper = Module.wrap(content);
+  var compiledWrapper = vm.runInThisContext(wrapper, {
+    filename: filename,
+    lineOffset: 0,
+    displayErrors: true
+  });
+  var dirname = path.dirname(filename);
+  var require = internalModule.makeRequireFunction.call(this);
+  var args = [this.exports, require, this, filename, dirname];
+  var depth = internalModule.requireDepth;
+  if (depth === 0) stat.cache = new Map();
+  var result = compiledWrapper.apply(this.exports, args);
+  if (depth === 0) stat.cache = null;
+  return result;
+};</p>
+
+<pre><code>函数比较长，只复制了一部分，这里主要关注**wrapper**，这是对读取的js文件内容进行了一个“包装”，因为作为一个模块代码里面肯带会有```module.exports```，那么怎么把exports的内容传出来呢，其实他做的工作就是类似于：
+文件内容：```module.exports={name:&quot;bob&quot;}```
+在外面包装一层匿名函数：
+</code></pre>
+
+<p>javascript
+(function(exports,require,module){
+  module.exports={name:&ldquo;bob&rdquo;}
+})(module.exports,require,module);</p>
+
+<pre><code>这样执行完了里面exports的内容就传出来了。（回到源代码）
+
+wrapper在content上加上头尾之后（这时候还是字符串，需要变成可以执行的js函数，例如eval的功能），经过处理（V8引擎处理的）后得到的compiledWrapper就是js函数，可以看下它执行的代码
+
+</code></pre>
+
+<p>javascript
+var args = [this.exports, require, this, filename, dirname];
+var result = compiledWrapper.apply(this.exports, args);
+```
+&gt; 到这里就结束了，接口内容已经放到module.exports中了，最后loaded变成true代表该模块已加载过了</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/" data-tooltip="vim折腾">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/" data-tooltip="SVG 之 path">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 NonymZhou. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2017/12/vim%E6%8A%98%E8%85%BE/" data-tooltip="vim折腾">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2016/12/svg-%E4%B9%8B-path/" data-tooltip="SVG 之 path">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://ydwx.github.io/2017/08/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fydwx.github.io%2F2017%2F08%2F%25E4%25BB%258E%25E6%25BA%2590%25E7%25A0%2581%25E5%2588%2586%25E6%259E%2590node%25E4%25B9%258Brequire%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fydwx.github.io%2F2017%2F08%2F%25E4%25BB%258E%25E6%25BA%2590%25E7%25A0%2581%25E5%2588%2586%25E6%259E%2590node%25E4%25B9%258Brequire%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fydwx.github.io%2F2017%2F08%2F%25E4%25BB%258E%25E6%25BA%2590%25E7%25A0%2581%25E5%2588%2586%25E6%259E%2590node%25E4%25B9%258Brequire%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">NonymZhou</h4>
+    
+      <div id="about-card-bio">一个前端爱好者的博客</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        武汉大学在读研究生
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/ydwx.github.io\/2017\/08\/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire\/';
+          
+            this.page.identifier = '\/2017\/08\/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90node%E4%B9%8Brequire\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
