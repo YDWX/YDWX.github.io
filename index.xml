@@ -5,11 +5,20 @@
     <link>https://ydwx.github.io/</link>
     <description>Recent content on Nonym Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 13 Oct 2019 11:55:16 +0800</lastBuildDate>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 03 Nov 2019 11:11:10 +0800</lastBuildDate>
     
 	<atom:link href="https://ydwx.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>前端Javascript继承方式总结</title>
+      <link>https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sun, 03 Nov 2019 11:11:10 +0800</pubDate>
+      
+      <guid>https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</guid>
+      <description>详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写</description>
+    </item>
     
     <item>
       <title>Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验</title>

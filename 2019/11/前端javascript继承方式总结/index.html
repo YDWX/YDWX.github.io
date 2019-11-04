@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="NonymZhou">
+<meta name="keywords" content="前端, Javascript, 继承, 原型链, 构造函数, development">
+<meta name="description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
+
+
+<meta property="og:description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端Javascript继承方式总结">
+<meta name="twitter:title" content="前端Javascript继承方式总结">
+<meta property="og:url" content="https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+<meta property="twitter:url" content="https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+<meta property="og:site_name" content="Nonym Blog">
+<meta property="og:description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
+<meta name="twitter:description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
+<meta property="og:locale" content="zh-cn">
+
+  
+    <meta property="article:published_time" content="2019-11-03T11:11:10">
+  
+  
+    <meta property="article:modified_time" content="2019-11-03T11:11:10">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+
+
+    <title>前端Javascript继承方式总结</title>
+
+    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    
+
+    
+
+    <link rel="canonical" href="https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://ydwx.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="作者的图片" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://ydwx.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="作者的图片" />
+        </a>
+        <h4 class="sidebar-profile-name">NonymZhou</h4>
+        
+          <h5 class="sidebar-profile-bio">一个前端爱好者的博客</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">首页</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">分类</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">标签</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">归档</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">关于</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      前端Javascript继承方式总结
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-11-03T11:11:10&#43;08:00">
+        
+  十一月 3, 2019
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>因为JS中没有类的概念，无法像其他语言一样完成“继承”，只能通过一些方式进行模拟，即使是ES6中的class也只是一个语法糖，也是通过ES5来完成的继承。下面介绍JS中的继承方式。</p>
+
+<p>注：下面用<code>类</code>来指代<code>构造函数</code>。</p>
+
+<h3 id="构造函数继承">构造函数继承</h3>
+
+<p>通过使用<code>call</code>函数在子类B中调用父类A的构造函数，将父类的成员变量和成员函数传给子类</p>
+
+<pre><code class="language-javascript">function A(name){
+  this.name = name
+}
+A.prototype.GetName=function(){
+  return this.name
+}
+function B(){
+  A.call(this, 'argument')
+}
+var b = new B()
+console.log(b.name) // argument
+console.log(b.GetName()) // Uncaught TypeError: b.GetName is not a function
+</code></pre>
+
+<p>缺点：无法继承父类的原型上的函数和变量，只能继承成员属性和成员变量。</p>
+
+<h3 id="原型链继承">原型链继承</h3>
+
+<p>使子类的原型<code>prototype</code>指向父类的实例对象，这样子类的实例通过原型链访问到父类的属性和函数</p>
+
+<pre><code class="language-javascript">function A(name){
+  this.name = name
+  this.color = ['red', 'green', 'blue']
+}
+A.prototype.GetName=function(){
+  return this.name
+}
+function B(){
+  
+}
+B.prototype = new A('nameA')
+var b1 = new B()
+var b2 = new B()
+console.log(b1.color) // ['red', 'green', 'blue']
+console.log(b2.color) // ['red', 'green', 'blue']
+b1.color.push('gray')
+console.log(b2.color) // ['red', 'green', 'blue', 'gray']
+</code></pre>
+
+<p>缺点：因为子类的原型是父类的实例对象，所以如果父类的实例上有一个引用类型对象，例如上例中的<code>color</code>，那么所有的子类的实例的<code>color</code>都是同一个对象，在任何一个对象中修改该属性，其他实例中也会被修改。</p>
+
+<h3 id="组合继承">组合继承</h3>
+
+<p>结合前两种继承方式，</p>
+
+<pre><code class="language-javascript">// 父类
+function A(name) {
+  this.name = name;
+  this.color = ['red', 'blue']
+
+  this.conFun = function () {
+    console.log('super type')
+  }
+}
+
+// A原型添加方法
+A.prototype.getName = function () {
+  return this.name
+}
+
+// 子类1
+function B(name) {
+  A.call(this, name);
+  this.fruit = ['apple', 'banana']
+}
+
+// 不使用B.prototype = new A()，保证A的成员属性不会出现在B的原型链上
+B.prototype = A.prototype
+B.prototype.constructor = B
+
+// 这里B原型添加方法必须在继承之后，否则，该原型中的方法会因为prototype指向改变而消失
+B.prototype.getBName = function () {
+  return 'B:'+this.name
+}
+
+// 子类2
+function C(name) {
+  A.call(this, name);
+  this.fruit = ['apple', 'banana']
+}
+
+
+C.prototype = A.prototype
+C.prototype.constructor = C
+
+// 这里C原型添加方法必须在继承之后，否则，该原型中的方法会因为prototype指向改变而消失
+C.prototype.getCName = function () {
+  return 'C:'+this.name
+}
+
+var b = new B('bbbname')
+var c = new C('cccname')
+// B上可以访问getCName，C上可以访问getBName
+b.getCName() // C:bbbname
+c.getBName() // B:cccname
+</code></pre>
+
+<p>缺点：这种继承方式规避了前面两种继承方式的缺点，但是仍然有点问题，这种直接将父类的原型（引用类型）赋值给子类的原型，那么所有继承于该父类的子类（可能有多个），他们的原型是同一个对象，多个子类都在原型上添加方法时，这些方法在每一个子类的实例中都可以被访问到。</p>
+
+<h3 id="原型式继承">原型式继承</h3>
+
+<p>该继承方式与前面的不太一样，因为这种不需要构造函数，仅仅需要对象就可以了。</p>
+
+<pre><code class="language-javascript">var superobj = {
+  name: 'superobj',
+  color: ['red', 'blue'],
+  printname: function(){
+    console.log(this.name)
+  }
+}
+function object(sobj){
+  function Func(){}
+  Func.prototype = sobj
+  return new Func()
+}
+// 子对象
+var subobj1 = object(superobj)
+var subobj2 = object(superobj)
+subobj1.color.push('yellow') 
+console.log(subobj2.color) // ['red', 'blue', 'yellow']
+</code></pre>
+
+<p>缺点：无法复用，无法在原型上添加方法</p>
+
+<h3 id="寄生式继承">寄生式继承</h3>
+
+<p>寄生式本质上和原型式没有什么区别，只是封装了一个用来继承的函数，在这个函数中可以对生成的子对象进行一些定制。</p>
+
+<pre><code class="language-javascript">var superobj = {
+  name: 'superobj',
+  color: ['red', 'blue'],
+  printname: function(){
+    console.log(this.name)
+  }
+}
+
+function object(sobj){
+  function Func(){}
+  Func.prototype = sobj
+  return new Func()
+}
+function InheritObj(sobj, custumerobj){
+  var clone = object(sobj)
+  Object.assign(clone, custumerobj)
+  return clone
+}
+// 子对象
+var subobj1 = InheritObj(superobj)
+var subobj2 = InheritObj(superobj)
+subobj1.color.push('yellow') 
+console.log(subobj2.color) // ['red', 'blue', 'yellow']
+</code></pre>
+
+<h3 id="寄生组合继承">寄生组合继承</h3>
+
+<p>该方式是目前为止最完美的解决方案，解决了前面出现的问题</p>
+
+<p>这种方式是构造函数继承+寄生式继承的结合</p>
+
+<pre><code class="language-javascript">function object(sobj){
+  function Func(){}
+  Func.prototype = sobj
+  return new Func()
+}
+function InheritObject(SubType, SuperType){
+  var prototype = object(SuperType.prototype)
+  prototype.constructor = SubType
+  SubType.prototype = prototype
+}
+// 父类
+function SuperType(){
+  this.type = 'super'
+  this.colors = ['red', 'blue', 'yellow']
+}
+SuperType.prototype.printColors = function(){
+  console.log(this.colors)
+}
+// 子类
+function SubType(){
+  // 构造函数继承
+  SuperType.call(this)
+  this.type = 'sub'
+}
+// 寄生继承
+InheritObject(SubType, SuperType)
+SubType.ptoyotype.printtype = function(){
+  console.log(this.type)
+}
+var sub1 = new SubType()
+var sub2 = new SubType()
+sub1.colors.push('green')
+sub1.printColors() // ['red', 'blue', 'yellow', 'green']
+sub2.printColors() // ['red', 'blue', 'yellow']
+</code></pre>
+
+<h3 id="利用es6的方法改写寄生组合式继承">利用ES6的方法改写寄生组合式继承</h3>
+
+<p>利用<code>Object.create</code>和<code>Object.assign</code>函数</p>
+
+<pre><code class="language-javascript">// 父类
+function SuperType(){
+  this.type = 'super'
+  this.colors = ['red', 'blue', 'yellow']
+}
+SuperType.prototype.printColors = function(){
+  console.log(this.colors)
+}
+// 子类
+function SubType(){
+  // 构造函数继承
+  SuperType.call(this)
+  // 继承于多个类的情况
+  OtherSuperType.call(this)
+  this.type = 'sub'
+}
+// 关键点，将父类原型包装一层赋值给子类原型
+SubType.prototype = Object.create(SuperType.prototype)
+// 混入其他父类的原型属性
+Object.assign(SubType.prototype, OtherSuperType.prototype)
+SubType.prototype.constructor = SubType
+
+SubType.ptoyotype.printtype = function(){
+  console.log(this.type)
+}
+var sub1 = new SubType()
+var sub2 = new SubType()
+sub1.colors.push('green')
+sub1.printColors() // ['red', 'blue', 'yellow', 'green']
+sub2.printColors() // ['red', 'blue', 'yellow']
+</code></pre>
+
+<h3 id="总结">总结</h3>
+
+<p>这些继承的方式主要出现的是如下三个问题：</p>
+
+<ol>
+<li>如何将<code>实例属性</code>和<code>原型上的函数</code>都继承（<code>原型链继承</code>和<code>构造函数继承</code>的问题，<code>组合继承</code>解决了）。</li>
+<li>非函数属性出现在原型链上会被所有实例共享，从而出现一个实例修改了，其他实例受影响（原型链继承中，将父类实例作为子类的原型造成的问题）。</li>
+<li><code>同一个父类</code>的多个子类<code>原型对象相同</code>，导致不同子类添加的原型函数会被共享（这是<code>组合继承</code>、<code>原型式继承</code>和<code>寄生式继承</code>的缺点），这是因为直接将父类的原型赋值给子类的原型。</li>
+</ol>
+
+<p><strong>针对每个问题的关键解决方式</strong></p>
+
+<p>原则：构造函数中设置非函数属性，原型中存储函数属性</p>
+
+<p>第一个问题：实例属性必须通过构造函数继承实现，即<code>SuperType.call(this)</code>，即必须通过构造函数+原型组合完成。</p>
+
+<p>第二个问题：不能将父类的实例赋值给子类的原型。</p>
+
+<p>第三个问题：不能将父类的<code>prototype</code>直接赋值给子类的<code>prototype</code>，需要在父类<code>prototype</code>外层套一个对象包装，再赋值给子类<code>prototype</code>，这也是寄生组合继承中<code>InheritObject</code>函数所做的。</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/" data-tooltip="Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 NonymZhou. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/" data-tooltip="Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fydwx.github.io%2F2019%2F11%2F%25E5%2589%258D%25E7%25AB%25AFjavascript%25E7%25BB%25A7%25E6%2589%25BF%25E6%2596%25B9%25E5%25BC%258F%25E6%2580%25BB%25E7%25BB%2593%2F">
+          <i class="fa fa-facebook-official"></i><span>分享到 Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fydwx.github.io%2F2019%2F11%2F%25E5%2589%258D%25E7%25AB%25AFjavascript%25E7%25BB%25A7%25E6%2589%25BF%25E6%2596%25B9%25E5%25BC%258F%25E6%2580%25BB%25E7%25BB%2593%2F">
+          <i class="fa fa-twitter"></i><span>分享到 Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="作者的图片" />
+    
+    <h4 id="about-card-name">NonymZhou</h4>
+    
+      <div id="about-card-bio">一个前端爱好者的博客</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        武汉大学在读研究生
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        中国
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/ydwx.github.io\/2019\/11\/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93\/';
+          
+            this.page.identifier = '\/2019\/11\/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
