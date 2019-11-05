@@ -15,8 +15,8 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验">
 <meta name="twitter:title" content="Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验">
-<meta property="og:url" content="https://ydwx.github.io/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/">
-<meta property="twitter:url" content="https://ydwx.github.io/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/">
+<meta property="og:url" content="http://blog.nonym.top/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/">
+<meta property="twitter:url" content="http://blog.nonym.top/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/">
 <meta property="og:site_name" content="Nonym Blog">
 <meta property="og:description" content="本文详细介绍JS原生的Object、Function、Array、Number、String、普通函数、普通对象的原型之间的关系">
 <meta name="twitter:description" content="本文详细介绍JS原生的Object、Function、Array、Number、String、普通函数、普通对象的原型之间的关系">
@@ -48,18 +48,18 @@
 
 
 
-  <meta property="og:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
-  <meta property="twitter:image" content="https://ydwx.github.io/images/ServerAvatarImage.jpg">
+  <meta property="og:image" content="http://blog.nonym.top/images/ServerAvatarImage.jpg">
+  <meta property="twitter:image" content="http://blog.nonym.top/images/ServerAvatarImage.jpg">
 
 
     <title>Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验</title>
 
-    <link rel="icon" href="https://ydwx.github.io/images/favicons/green.png">
+    <link rel="icon" href="http://blog.nonym.top/images/favicons/green.png">
     
 
     
 
-    <link rel="canonical" href="https://ydwx.github.io/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/">
+    <link rel="canonical" href="http://blog.nonym.top/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -67,7 +67,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://ydwx.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    <link rel="stylesheet" href="http://blog.nonym.top/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
     
     
     <script>
@@ -104,17 +104,17 @@ if (!doNotTrack) {
       <header id="header" data-behavior="5">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://ydwx.github.io/">Nonym Blog</a>
+    <a class="header-title-link" href="http://blog.nonym.top/">Nonym Blog</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="https://ydwx.github.io/#about">
+         href="http://blog.nonym.top/#about">
     
     
     
       
-        <img class="header-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="作者的图片" />
+        <img class="header-picture" src="http://blog.nonym.top/images/ServerAvatarImage.jpg" alt="作者的图片" />
       
     
     </a>
@@ -125,8 +125,8 @@ if (!doNotTrack) {
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="https://ydwx.github.io/#about">
-          <img class="sidebar-profile-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="作者的图片" />
+        <a href="http://blog.nonym.top/#about">
+          <img class="sidebar-profile-picture" src="http://blog.nonym.top/images/ServerAvatarImage.jpg" alt="作者的图片" />
         </a>
         <h4 class="sidebar-profile-name">NonymZhou</h4>
         
@@ -138,7 +138,7 @@ if (!doNotTrack) {
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://ydwx.github.io/">
+      <a class="sidebar-button-link " href="http://blog.nonym.top/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -148,7 +148,7 @@ if (!doNotTrack) {
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://ydwx.github.io/categories">
+      <a class="sidebar-button-link " href="http://blog.nonym.top/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -158,7 +158,7 @@ if (!doNotTrack) {
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://ydwx.github.io/tags">
+      <a class="sidebar-button-link " href="http://blog.nonym.top/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -168,7 +168,7 @@ if (!doNotTrack) {
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://ydwx.github.io/archives">
+      <a class="sidebar-button-link " href="http://blog.nonym.top/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -178,7 +178,7 @@ if (!doNotTrack) {
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://ydwx.github.io/#about">
+      <a class="sidebar-button-link " href="http://blog.nonym.top/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -216,7 +216,7 @@ if (!doNotTrack) {
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://ydwx.github.io/index.xml">
+      <a class="sidebar-button-link " href="http://blog.nonym.top/index.xml">
     
       <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
       
@@ -333,7 +333,7 @@ OK，这就是JS中的原型链的样子，都是围绕前面提到的几点进�
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" data-tooltip="前端Javascript继承方式总结">
+                <a class="post-action-btn btn btn--default tooltip--top" href="http://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" data-tooltip="前端Javascript继承方式总结">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -341,7 +341,7 @@ OK，这就是JS中的原型链的样子，都是围绕前面提到的几点进�
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/10/css3%E6%96%B0%E7%89%B9%E6%80%A7/" data-tooltip="CSS3新特性">
+                <a class="post-action-btn btn btn--default tooltip--top" href="http://blog.nonym.top/2019/10/css3%E6%96%B0%E7%89%B9%E6%80%A7/" data-tooltip="CSS3新特性">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -415,7 +415,7 @@ OK，这就是JS中的原型链的样子，都是围绕前面提到的几点进�
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" data-tooltip="前端Javascript继承方式总结">
+                <a class="post-action-btn btn btn--default tooltip--top" href="http://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" data-tooltip="前端Javascript继承方式总结">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -423,7 +423,7 @@ OK，这就是JS中的原型链的样子，都是围绕前面提到的几点进�
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://ydwx.github.io/2019/10/css3%E6%96%B0%E7%89%B9%E6%80%A7/" data-tooltip="CSS3新特性">
+                <a class="post-action-btn btn btn--default tooltip--top" href="http://blog.nonym.top/2019/10/css3%E6%96%B0%E7%89%B9%E6%80%A7/" data-tooltip="CSS3新特性">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -469,7 +469,7 @@ OK，这就是JS中的原型链的样子，都是围绕前面提到的几点进�
       <i class="fa fa-remove"></i>
     </div>
     
-      <img id="about-card-picture" src="https://ydwx.github.io/images/ServerAvatarImage.jpg" alt="作者的图片" />
+      <img id="about-card-picture" src="http://blog.nonym.top/images/ServerAvatarImage.jpg" alt="作者的图片" />
     
     <h4 id="about-card-name">NonymZhou</h4>
     
@@ -497,7 +497,7 @@ OK，这就是JS中的原型链的样子，都是围绕前面提到的几点进�
     
   
     
-      <div id="cover" style="background-image:url('https://ydwx.github.io/images/cover.jpg');"></div>
+      <div id="cover" style="background-image:url('http://blog.nonym.top/images/cover.jpg');"></div>
     
   
 
@@ -510,7 +510,7 @@ OK，这就是JS中的原型链的样子，都是围绕前面提到的几点进�
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://ydwx.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+<script src="http://blog.nonym.top/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
 
 
 <script lang="javascript">
