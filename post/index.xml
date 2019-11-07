@@ -84,6 +84,15 @@
     </item>
     
     <item>
+      <title>前端跨域必修之JSONP</title>
+      <link>https://blog.nonym.top/2017/08/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/</link>
+      <pubDate>Mon, 07 Aug 2017 02:06:10 +0800</pubDate>
+      
+      <guid>https://blog.nonym.top/2017/08/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/</guid>
+      <description>详细介绍JSONP的原理，手写jsonp函数以及jsonp和Promise结合</description>
+    </item>
+    
+    <item>
       <title>SVG 之 path</title>
       <link>https://blog.nonym.top/2016/12/svg-%E4%B9%8B-path/</link>
       <pubDate>Sat, 03 Dec 2016 00:43:09 +0800</pubDate>
