@@ -267,8 +267,72 @@ if (!doNotTrack) {
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <blockquote>
+              
+
+<blockquote>
+<p>本文从jsonp的优缺点，jsonp的流程原理以及jsonp的简单实现来进行介绍</p>
 </blockquote>
+
+<h3 id="jsonp的优缺点">JSONP的优缺点</h3>
+
+<p>优点：</p>
+
+<ol>
+<li>通过script标签可访问非同源站点的资源的特性，不受浏览器对于JS访问非同源站点资源的限制。</li>
+<li>兼容性好，因为是通过script标签完成，所以在任何版本的浏览器里都可以完美实现</li>
+<li>可以实现类似ajax的方式，将处理数据的权利交给 前端实现</li>
+</ol>
+
+<p>缺点：</p>
+
+<ol>
+<li>jsonp只能进行GET请求，不能进行post等其他类型的请求</li>
+<li>jsonp请求在失败的时候不会返回相应的状态码</li>
+<li>jsonp不能解决两个不同域的页面之间JS的交互</li>
+</ol>
+
+<h3 id="jsonp结合promise实现">JSONP结合Promise实现</h3>
+
+<p>实现一个函数<code>jsonp</code>，参数为<code>url</code>、<code>params</code>、<code>success</code>、<code>error</code>、<code>timeout</code>，返回一个<code>Promise</code>对象。例如：</p>
+
+<pre><code class="language-javascript">function jsonp(url, params, timeout){
+
+}
+// success和error是
+jsonp(url, params, timeout).then(success, error)
+</code></pre>
+
+<h4 id="实现">实现</h4>
+
+<pre><code class="language-javascript">function jsonp(url, params, timeout){
+  var scriptnode = document.createElement('script')
+  var params_str = ''
+  for(var key in params) {
+    params_str+='&amp;'+key+'='+params[key]
+  }
+  // 挂载在window对象上的回调函数名
+  var callback_name = (new Date()).getTime()+'_callback'
+  var url_entire = url+'?'+callback+'='+callback_name+params_str
+  scriptnode.src = url_entire
+  return new Promise(function (resolve, reject){
+    // 自定义回调处理函数，并挂载在window上
+    window[callback_name] = function(data) {
+      if (data.status&gt;=400){
+        resolve(data)
+      }else{
+        reject(data)
+      }
+    }
+    // 设置超时时间，可以使用Promise.race来完成
+    setTimeout(function(){
+      reject(new Error('timeout'))
+    },timeout)
+    document.body.appendChild(scriptnode)
+  })
+}
+</code></pre>
+
+<p>以上只是一个jsonp的简单实现，还有很多不完善的地方，欢迎大家多多交流</p>
 
               
             </div>
