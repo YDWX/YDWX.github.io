@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SVG on Nonym Blog</title>
+    <link>https://blog.nonym.top/tags/svg/</link>
+    <description>Recent content in SVG on Nonym Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 03 Dec 2016 00:43:09 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.nonym.top/tags/svg/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>SVG 之 path</title>
+      <link>https://blog.nonym.top/2016/12/svg-%E4%B9%8B-path/</link>
+      <pubDate>Sat, 03 Dec 2016 00:43:09 +0800</pubDate>
+      
+      <guid>https://blog.nonym.top/2016/12/svg-%E4%B9%8B-path/</guid>
+      <description>本文介绍SVG的path标签的部分属性和标签，包括d属性、椭圆的实现、贝赛尔曲线的介绍、animate标签等</description>
+    </item>
+    
+  </channel>
+</rss>

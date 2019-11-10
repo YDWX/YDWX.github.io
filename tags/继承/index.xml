@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>继承 on Nonym Blog</title>
+    <link>https://blog.nonym.top/tags/%E7%BB%A7%E6%89%BF/</link>
+    <description>Recent content in 继承 on Nonym Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 03 Nov 2019 11:11:10 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.nonym.top/tags/%E7%BB%A7%E6%89%BF/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>前端Javascript继承方式总结</title>
+      <link>https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sun, 03 Nov 2019 11:11:10 +0800</pubDate>
+      
+      <guid>https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</guid>
+      <description>详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写</description>
+    </item>
+    
+  </channel>
+</rss>

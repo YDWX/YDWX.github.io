@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux磁盘操作 on Nonym Blog</title>
+    <link>https://blog.nonym.top/tags/linux%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/</link>
+    <description>Recent content in linux磁盘操作 on Nonym Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 20 Aug 2018 15:46:47 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.nonym.top/tags/linux%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Linux根目录扩容方法及其涉及的相关磁盘操作</title>
+      <link>https://blog.nonym.top/2018/08/linux%E6%A0%B9%E7%9B%AE%E5%BD%95%E6%89%A9%E5%AE%B9%E6%96%B9%E6%B3%95%E5%8F%8A%E5%85%B6%E6%B6%89%E5%8F%8A%E7%9A%84%E7%9B%B8%E5%85%B3%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/</link>
+      <pubDate>Mon, 20 Aug 2018 15:46:47 +0800</pubDate>
+      
+      <guid>https://blog.nonym.top/2018/08/linux%E6%A0%B9%E7%9B%AE%E5%BD%95%E6%89%A9%E5%AE%B9%E6%96%B9%E6%B3%95%E5%8F%8A%E5%85%B6%E6%B6%89%E5%8F%8A%E7%9A%84%E7%9B%B8%E5%85%B3%E7%A3%81%E7%9B%98%E6%93%8D%E4%BD%9C/</guid>
+      <description>我们经常在建立linux虚拟机或者主机的时候，由于分区大小的问题，导致后来的使用中根目录或者某个目录的大小不够，所以有时候需要进行扩容，这里给出扩容根目录的例子来介绍扩容的整体流程</description>
+    </item>
+    
+  </channel>
+</rss>

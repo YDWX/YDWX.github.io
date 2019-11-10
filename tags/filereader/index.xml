@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FileReader on Nonym Blog</title>
+    <link>https://blog.nonym.top/tags/filereader/</link>
+    <description>Recent content in FileReader on Nonym Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 30 Nov 2016 23:19:47 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.nonym.top/tags/filereader/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>关于DataURL  Blob  File  FileReader  createObjectURL  canvas及其相互转化</title>
+      <link>https://blog.nonym.top/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/</link>
+      <pubDate>Wed, 30 Nov 2016 23:19:47 +0800</pubDate>
+      
+      <guid>https://blog.nonym.top/2016/11/%E5%85%B3%E4%BA%8Edataurl-blob-file-filereader-createobjecturl-canvas%E5%8F%8A%E5%85%B6%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96/</guid>
+      <description>本文简单介绍了DataURL  Blob  File  FileReader  createObjectURL  canvas，并给出了其他几种类型的转化方式</description>
+    </item>
+    
+  </channel>
+</rss>

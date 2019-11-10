@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>flex on Nonym Blog</title>
+    <link>https://blog.nonym.top/tags/flex/</link>
+    <description>Recent content in flex on Nonym Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 30 Nov 2016 23:19:47 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.nonym.top/tags/flex/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Flex布局——属性</title>
+      <link>https://blog.nonym.top/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/</link>
+      <pubDate>Wed, 30 Nov 2016 23:19:47 +0800</pubDate>
+      
+      <guid>https://blog.nonym.top/2016/11/flex%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7/</guid>
+      <description>详细介绍Flex布局的属性，父元素的属性和子元素的属性，其中包括水平垂直居中等常用的布局方式。</description>
+    </item>
+    
+  </channel>
+</rss>
