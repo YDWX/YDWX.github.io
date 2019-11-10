@@ -8,29 +8,35 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.58.3 with theme Tranquilpeak 0.4.7-BETA">
 <meta name="author" content="NonymZhou">
-<meta name="keywords" content="前端, Javascript, 继承, 原型链, 构造函数, development">
-<meta name="description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
+<meta name="keywords" content="jsonp, 跨域, development">
+<meta name="description" content="详细介绍JSONP的原理，手写jsonp函数以及jsonp和Promise结合">
 
 
-<meta property="og:description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
+<meta property="og:description" content="详细介绍JSONP的原理，手写jsonp函数以及jsonp和Promise结合">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端Javascript继承方式总结">
-<meta name="twitter:title" content="前端Javascript继承方式总结">
-<meta property="og:url" content="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
-<meta property="twitter:url" content="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+<meta property="og:title" content="前端跨域必修之JSONP">
+<meta name="twitter:title" content="前端跨域必修之JSONP">
+<meta property="og:url" content="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/">
+<meta property="twitter:url" content="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/">
 <meta property="og:site_name" content="Nonym Blog">
-<meta property="og:description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
-<meta name="twitter:description" content="详解Javascript的六种继承方式——构造函数继承、原型链继承、组合继承、原型式继承、寄生式继承和寄生组合继承，以及使用ES6的方法改写">
+<meta property="og:description" content="详细介绍JSONP的原理，手写jsonp函数以及jsonp和Promise结合">
+<meta name="twitter:description" content="详细介绍JSONP的原理，手写jsonp函数以及jsonp和Promise结合">
 <meta property="og:locale" content="zh-cn">
 
   
-    <meta property="article:published_time" content="2019-11-03T11:11:10">
+    <meta property="article:published_time" content="2019-11-10T22:28:10">
   
   
-    <meta property="article:modified_time" content="2019-11-03T11:11:10">
+    <meta property="article:modified_time" content="2019-11-10T22:28:10">
   
   
   
+  
+    
+      <meta property="article:tag" content="jsonp">
+    
+      <meta property="article:tag" content="跨域">
+    
   
 
 
@@ -42,9 +48,6 @@
 
 
 
-  <meta property="og:image" content="https://img-blog.csdnimg.cn/20191104164710298.png">
-  <meta property="twitter:image" content="https://img-blog.csdnimg.cn/20191104164710298.png">
-
 
 
 
@@ -53,14 +56,14 @@
   <meta property="twitter:image" content="https://blog.nonym.top/images/ServerAvatarImage.jpg">
 
 
-    <title>前端Javascript继承方式总结</title>
+    <title>前端跨域必修之JSONP</title>
     
     <link rel="icon" href="https://blog.nonym.top/images/favicons/green.png">
     
 
     
 
-    <link rel="canonical" href="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">
+    <link rel="canonical" href="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -242,15 +245,15 @@ if (!doNotTrack) {
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      前端Javascript继承方式总结
+      前端跨域必修之JSONP
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time itemprop="datePublished" datetime="2019-11-03T11:11:10&#43;08:00">
+      <time itemprop="datePublished" datetime="2019-11-10T22:28:10&#43;08:00">
         
-  十一月 3, 2019
+  十一月 10, 2019
 
       </time>
     
@@ -263,270 +266,88 @@ if (!doNotTrack) {
             <div class="main-content-wrap">
               
 
-<p>因为JS中没有类的概念，无法像其他语言一样完成“继承”，只能通过一些方式进行模拟，即使是ES6中的class也只是一个语法糖，也是通过ES5来完成的继承。下面介绍JS中的继承方式。</p>
+<blockquote>
+<p>本文从jsonp的优缺点，jsonp的流程原理以及jsonp的简单实现来进行介绍</p>
+</blockquote>
 
-<p>注：下面用<code>类</code>来指代<code>构造函数</code>。</p>
+<h3 id="jsonp的优缺点">JSONP的优缺点</h3>
 
-<h3 id="构造函数继承">构造函数继承</h3>
-
-<p>通过使用<code>call</code>函数在子类B中调用父类A的构造函数，将父类的成员变量和成员函数传给子类</p>
-
-<pre><code class="language-javascript">function A(name){
-  this.name = name
-}
-A.prototype.GetName=function(){
-  return this.name
-}
-function B(){
-  A.call(this, 'argument')
-}
-var b = new B()
-console.log(b.name) // argument
-console.log(b.GetName()) // Uncaught TypeError: b.GetName is not a function
-</code></pre>
-
-<p>缺点：无法继承父类的原型上的函数和变量，只能继承成员属性和成员变量。</p>
-
-<h3 id="原型链继承">原型链继承</h3>
-
-<p>使子类的原型<code>prototype</code>指向父类的实例对象，这样子类的实例通过原型链访问到父类的属性和函数</p>
-
-<pre><code class="language-javascript">function A(name){
-  this.name = name
-  this.color = ['red', 'green', 'blue']
-}
-A.prototype.GetName=function(){
-  return this.name
-}
-function B(){
-  
-}
-B.prototype = new A('nameA')
-var b1 = new B()
-var b2 = new B()
-console.log(b1.color) // ['red', 'green', 'blue']
-console.log(b2.color) // ['red', 'green', 'blue']
-b1.color.push('gray')
-console.log(b2.color) // ['red', 'green', 'blue', 'gray']
-</code></pre>
-
-<p>缺点：因为子类的原型是父类的实例对象，所以如果父类的实例上有一个引用类型对象，例如上例中的<code>color</code>，那么所有的子类的实例的<code>color</code>都是同一个对象，在任何一个对象中修改该属性，其他实例中也会被修改。</p>
-
-<h3 id="组合继承">组合继承</h3>
-
-<p>结合前两种继承方式，</p>
-
-<pre><code class="language-javascript">// 父类
-function A(name) {
-  this.name = name;
-  this.color = ['red', 'blue']
-
-  this.conFun = function () {
-    console.log('super type')
-  }
-}
-
-// A原型添加方法
-A.prototype.getName = function () {
-  return this.name
-}
-
-// 子类1
-function B(name) {
-  A.call(this, name);
-  this.fruit = ['apple', 'banana']
-}
-
-// 不使用B.prototype = new A()，保证A的成员属性不会出现在B的原型链上
-B.prototype = A.prototype
-B.prototype.constructor = B
-
-// 这里B原型添加方法必须在继承之后，否则，该原型中的方法会因为prototype指向改变而消失
-B.prototype.getBName = function () {
-  return 'B:'+this.name
-}
-
-// 子类2
-function C(name) {
-  A.call(this, name);
-  this.fruit = ['apple', 'banana']
-}
-
-
-C.prototype = A.prototype
-C.prototype.constructor = C
-
-// 这里C原型添加方法必须在继承之后，否则，该原型中的方法会因为prototype指向改变而消失
-C.prototype.getCName = function () {
-  return 'C:'+this.name
-}
-
-var b = new B('bbbname')
-var c = new C('cccname')
-// B上可以访问getCName，C上可以访问getBName
-b.getCName() // C:bbbname
-c.getBName() // B:cccname
-</code></pre>
-
-<p>缺点：这种继承方式规避了前面两种继承方式的缺点，但是仍然有点问题，这种直接将父类的原型（引用类型）赋值给子类的原型，那么所有继承于该父类的子类（可能有多个），他们的原型是同一个对象，多个子类都在原型上添加方法时，这些方法在每一个子类的实例中都可以被访问到。</p>
-
-<h3 id="原型式继承">原型式继承</h3>
-
-<p>该继承方式与前面的不太一样，因为这种不需要构造函数，仅仅需要对象就可以了。</p>
-
-<pre><code class="language-javascript">var superobj = {
-  name: 'superobj',
-  color: ['red', 'blue'],
-  printname: function(){
-    console.log(this.name)
-  }
-}
-function object(sobj){
-  function Func(){}
-  Func.prototype = sobj
-  return new Func()
-}
-// 子对象
-var subobj1 = object(superobj)
-var subobj2 = object(superobj)
-subobj1.color.push('yellow') 
-console.log(subobj2.color) // ['red', 'blue', 'yellow']
-</code></pre>
-
-<p>缺点：无法复用，无法在原型上添加方法</p>
-
-<h3 id="寄生式继承">寄生式继承</h3>
-
-<p>寄生式本质上和原型式没有什么区别，只是封装了一个用来继承的函数，在这个函数中可以对生成的子对象进行一些定制。</p>
-
-<pre><code class="language-javascript">var superobj = {
-  name: 'superobj',
-  color: ['red', 'blue'],
-  printname: function(){
-    console.log(this.name)
-  }
-}
-
-function object(sobj){
-  function Func(){}
-  Func.prototype = sobj
-  return new Func()
-}
-function InheritObj(sobj, custumerobj){
-  var clone = object(sobj)
-  Object.assign(clone, custumerobj)
-  return clone
-}
-// 子对象
-var subobj1 = InheritObj(superobj)
-var subobj2 = InheritObj(superobj)
-subobj1.color.push('yellow') 
-console.log(subobj2.color) // ['red', 'blue', 'yellow']
-</code></pre>
-
-<h3 id="寄生组合继承">寄生组合继承</h3>
-
-<p>该方式是目前为止最完美的解决方案，解决了前面出现的问题</p>
-
-<p>这种方式是构造函数继承+寄生式继承的结合</p>
-
-<pre><code class="language-javascript">function object(sobj){
-  function Func(){}
-  Func.prototype = sobj
-  return new Func()
-}
-function InheritObject(SubType, SuperType){
-  var prototype = object(SuperType.prototype)
-  prototype.constructor = SubType
-  SubType.prototype = prototype
-}
-// 父类
-function SuperType(){
-  this.type = 'super'
-  this.colors = ['red', 'blue', 'yellow']
-}
-SuperType.prototype.printColors = function(){
-  console.log(this.colors)
-}
-// 子类
-function SubType(){
-  // 构造函数继承
-  SuperType.call(this)
-  this.type = 'sub'
-}
-// 寄生继承
-InheritObject(SubType, SuperType)
-SubType.ptoyotype.printtype = function(){
-  console.log(this.type)
-}
-var sub1 = new SubType()
-var sub2 = new SubType()
-sub1.colors.push('green')
-sub1.printColors() // ['red', 'blue', 'yellow', 'green']
-sub2.printColors() // ['red', 'blue', 'yellow']
-</code></pre>
-
-<h3 id="利用es6的方法改写寄生组合式继承">利用ES6的方法改写寄生组合式继承</h3>
-
-<p>利用<code>Object.create</code>和<code>Object.assign</code>函数</p>
-
-<pre><code class="language-javascript">// 父类
-function SuperType(){
-  this.type = 'super'
-  this.colors = ['red', 'blue', 'yellow']
-}
-SuperType.prototype.printColors = function(){
-  console.log(this.colors)
-}
-// 子类
-function SubType(){
-  // 构造函数继承
-  SuperType.call(this)
-  // 继承于多个类的情况
-  OtherSuperType.call(this)
-  this.type = 'sub'
-}
-// 关键点，将父类原型包装一层赋值给子类原型
-SubType.prototype = Object.create(SuperType.prototype)
-// 混入其他父类的原型属性
-Object.assign(SubType.prototype, OtherSuperType.prototype)
-SubType.prototype.constructor = SubType
-
-SubType.ptoyotype.printtype = function(){
-  console.log(this.type)
-}
-var sub1 = new SubType()
-var sub2 = new SubType()
-sub1.colors.push('green')
-sub1.printColors() // ['red', 'blue', 'yellow', 'green']
-sub2.printColors() // ['red', 'blue', 'yellow']
-</code></pre>
-
-<h3 id="总结">总结</h3>
-
-<p>这些继承的方式主要出现的是如下三个问题：</p>
+<p>优点：</p>
 
 <ol>
-<li>如何将<code>实例属性</code>和<code>原型上的函数</code>都继承（<code>原型链继承</code>和<code>构造函数继承</code>的问题，<code>组合继承</code>解决了）。</li>
-<li>非函数属性出现在原型链上会被所有实例共享，从而出现一个实例修改了，其他实例受影响（原型链继承中，将父类实例作为子类的原型造成的问题）。</li>
-<li><code>同一个父类</code>的多个子类<code>原型对象相同</code>，导致不同子类添加的原型函数会被共享（这是<code>组合继承</code>、<code>原型式继承</code>和<code>寄生式继承</code>的缺点），这是因为直接将父类的原型赋值给子类的原型。</li>
+<li>通过script标签可访问非同源站点的资源的特性，不受浏览器对于JS访问非同源站点资源的限制。</li>
+<li>兼容性好，因为是通过script标签完成，所以在任何版本的浏览器里都可以完美实现</li>
+<li>可以实现类似ajax的方式，将处理数据的权利交给 前端实现</li>
 </ol>
 
-<p><strong>针对每个问题的关键解决方式</strong></p>
+<p>缺点：</p>
 
-<p>原则：构造函数中设置非函数属性，原型中存储函数属性</p>
+<ol>
+<li>jsonp只能进行GET请求，不能进行post等其他类型的请求</li>
+<li>jsonp请求在失败的时候不会返回相应的状态码</li>
+<li>jsonp不能解决两个不同域的页面之间JS的交互</li>
+</ol>
 
-<p>第一个问题：实例属性必须通过构造函数继承实现，即<code>SuperType.call(this)</code>，即必须通过构造函数+原型组合完成。</p>
+<h3 id="jsonp结合promise实现">JSONP结合Promise实现</h3>
 
-<p>第二个问题：不能将父类的实例赋值给子类的原型。</p>
+<p>实现一个函数<code>jsonp</code>，参数为<code>url</code>、<code>params</code>、<code>success</code>、<code>error</code>、<code>timeout</code>，返回一个<code>Promise</code>对象。例如：</p>
 
-<p>第三个问题：不能将父类的<code>prototype</code>直接赋值给子类的<code>prototype</code>，需要在父类<code>prototype</code>外层套一个对象包装，再赋值给子类<code>prototype</code>，这也是寄生组合继承中<code>InheritObject</code>函数所做的。</p>
+<pre><code class="language-javascript">function jsonp(url, params, timeout){
+
+}
+// success和error是
+jsonp(url, params, timeout).then(success, error)
+</code></pre>
+
+<h4 id="实现">实现</h4>
+
+<pre><code class="language-javascript">function jsonp(url, params, timeout){
+  var scriptnode = document.createElement('script')
+  var params_str = ''
+  for(var key in params) {
+    params_str+='&amp;'+key+'='+params[key]
+  }
+  // 挂载在window对象上的回调函数名
+  var callback_name = (new Date()).getTime()+'_callback'
+  var url_entire = url+'?'+callback+'='+callback_name+params_str
+  scriptnode.src = url_entire
+  return new Promise(function (resolve, reject){
+    // 自定义回调处理函数，并挂载在window上
+    window[callback_name] = function(data) {
+      if (data.status&gt;=400){
+        resolve(data)
+      }else{
+        reject(data)
+      }
+    }
+    // 设置超时时间，可以使用Promise.race来完成
+    setTimeout(function(){
+      reject(new Error('timeout'))
+    },timeout)
+    document.body.appendChild(scriptnode)
+  })
+}
+</code></pre>
+
+<p>以上只是一个jsonp的简单实现，还有很多不完善的地方，欢迎大家多多交流</p>
 
               
             </div>
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">标签</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://blog.nonym.top/tags/jsonp/">jsonp</a>
+
+  <a class="tag tag--primary tag--small" href="https://blog.nonym.top/tags/%E8%B7%A8%E5%9F%9F/">跨域</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">
@@ -536,7 +357,7 @@ sub2.printColors() // ['red', 'blue', 'yellow']
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/" data-tooltip="前端跨域必修之JSONP">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -544,7 +365,7 @@ sub2.printColors() // ['red', 'blue', 'yellow']
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://blog.nonym.top/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/" data-tooltip="Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" data-tooltip="前端Javascript继承方式总结">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>
@@ -575,7 +396,7 @@ sub2.printColors() // ['red', 'blue', 'yellow']
 </div>
 
               
-  <span style="display:block;clear: both;" id="/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="前端Javascript继承方式总结">
+  <span style="display:block;clear: both;" id="/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/" class="leancloud_visitors" data-flag-title="前端跨域必修之JSONP">
     <span class="post-meta-item-text">文章阅读量 </span>
     <span class="leancloud-visitors-count"></span>
     <p></p>
@@ -618,7 +439,7 @@ sub2.printColors() // ['red', 'blue', 'yellow']
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/" data-tooltip="前端跨域必修之JSONP">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -626,7 +447,7 @@ sub2.printColors() // ['red', 'blue', 'yellow']
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://blog.nonym.top/2019/10/objectarraynumberstring%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1function%E7%AD%89%E7%9A%84%E5%8E%9F%E5%9E%8B%E9%93%BE%E5%85%B3%E7%B3%BB%E5%A4%9A%E6%AC%A1%E9%9D%A2%E8%AF%95%E5%A4%B1%E8%B4%A5%E6%80%BB%E7%BB%93%E7%9A%84%E7%BB%8F%E9%AA%8C/" data-tooltip="Object，Array，Number，String，普通函数，普通对象，Function等的原型链关系——多次面试失败总结的经验">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AFjavascript%E7%BB%A7%E6%89%BF%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" data-tooltip="前端Javascript继承方式总结">
               
                   <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
                   <i class="fa fa-angle-right"></i>

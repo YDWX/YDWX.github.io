@@ -6,17 +6,17 @@
     <description>Recent content in jsonp on Nonym Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 07 Aug 2017 02:06:10 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 10 Nov 2019 22:28:10 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.nonym.top/tags/jsonp/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>前端跨域必修之JSONP</title>
-      <link>https://blog.nonym.top/2017/08/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/</link>
-      <pubDate>Mon, 07 Aug 2017 02:06:10 +0800</pubDate>
+      <link>https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/</link>
+      <pubDate>Sun, 10 Nov 2019 22:28:10 +0800</pubDate>
       
-      <guid>https://blog.nonym.top/2017/08/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/</guid>
+      <guid>https://blog.nonym.top/2019/11/%E5%89%8D%E7%AB%AF%E8%B7%A8%E5%9F%9F%E5%BF%85%E4%BF%AE%E4%B9%8Bjsonp/</guid>
       <description>详细介绍JSONP的原理，手写jsonp函数以及jsonp和Promise结合</description>
     </item>
     
